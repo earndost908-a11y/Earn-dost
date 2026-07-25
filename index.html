@@ -3,281 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Earn Money - 100 Coins = 1₹</title>
+  <title>EarnDost - Survey Karke Paise Kamao</title>
   <style>
-    * {margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif}
-    body {background:#0a0a0a; color:#fff; padding:15px}
-    .container {max-width:500px; margin:auto}
-    .header {background:linear-gradient(135deg,#16a34a,#22c55e); padding:20px; border-radius:16px; text-align:center; margin-bottom:20px}
-    .header h1 {font-size:24px; margin-bottom:5px}
-    .balance {font-size:32px; font-weight:bold}
-    .balance span {font-size:16px; color:#dcfce7}
-    .card {background:#1a1a1a; border:1px solid #2a2a2a; border-radius:12px; padding:18px; margin-bottom:15px}
-    .card h3 {color:#22c55e; margin-bottom:12px; font-size:18px}
-    .btn {width:100%; padding:14px; border:none; border-radius:8px; font-weight:bold; font-size:15px; cursor:pointer; margin-top:8px}
-    .btn-green {background:#22c55e; color:#000}
-    .btn-green:hover {background:#16a34a}
-    .btn-blue {background:#3b82f6; color:#fff}
-    .btn:disabled {background:#404040; color:#888; cursor:not-allowed}
-    .task-btn {background:#262626; border:1px solid #404040; color:#fff; text-align:left; padding:12px; margin:6px 0}
-    .flex {display:flex; justify-content:space-between; align-items:center}
-    .small {font-size:12px; color:#888}
-    input,select {width:100%; padding:12px; background:#262626; border:1px solid #404040; border-radius:8px; color:#fff; margin:8px 0}
-    .upi-grid {display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0}
-    .upi-option {background:#262626; border:2px solid #404040; border-radius:8px; padding:10px; text-align:center; cursor:pointer; font-size:12px}
-    .upi-option.active {border-color:#22c55e; background:#1a2e1a}
-    .upi-option img {width:30px; height:30px; margin-bottom:5px}
-    .refer-box {background:#1e3a8a; padding:15px; border-radius:8px; text-align:center}
-    .refer-code {background:#000; padding:10px; border-radius:6px; margin:10px 0; letter-spacing:2px}
+    body { font-family: Arial, sans-serif; text-align: center; background: #f0f2f5; margin: 0; padding: 20px; }
+    .container { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    h1 { color: #1877f2; }
+    button { background: #1877f2; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 8px; cursor: pointer; margin: 10px; width: 100%; }
+    button:hover { background: #0d65d9; }
+    #surveyBtn { background: #28a745; display: none; }
+    #logoutBtn { background: #dc3545; display: none; }
+    #userInfo { margin-top: 20px; font-weight: bold; }
   </style>
 </head>
-  <div style="margin-top:15px;">
-  <button onclick="openCPX()" style="width:100%; padding:12px; background:#222; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer;">
-    Complete Survey +100 Coins
-  </button>
-</div>
-
-<script>
-function openCPX() {
-  let userId = localStorage.getItem("userId") || "guest123"; 
-  let userName = localStorage.getItem("userName") || "User";
-  let userEmail = localStorage.getItem("userEmail") || "user@email.com";
-  
-  let cpxUrl = `https://offers.cpx-research.com/index.php?app_id=34757&ext_user_id=${userId}&secure_hash={secure_hash}&username=${userName}&email=${userEmail}&subid_1=&subid_2`;
-  
-  window.open(cpxUrl, "_blank");
-}
-</script>
 <body>
-  <div style="text-align:center; margin:30px 0;">
-  <h2>🎁 Earn Coins</h2>
-  <p>Complete Surveys & Offers</p>
-  
-  <button onclick="openCPX()" style="padding:15px 30px; background:#ff5722; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer;">
-    Start Earning Now
-  </button>
-</div>
-
-<script>
-function openCPX() {
-  let userId = localStorage.getItem("userId") || "guest123"; 
-  let userName = localStorage.getItem("userName") || "User";
-  let userEmail = localStorage.getItem("userEmail") || "user@email.com";
-  
-  let cpxUrl = `https://offers.cpx-research.com/index.php?app_id=34757&ext_user_id=${userId}&secure_hash={secure_hash}&username=${userName}&email=${userEmail}&subid_1=&subid_2`;
-  
-  window.open(cpxUrl, "_blank");
-}
-</script>
   <div class="container">
-    <div class="header">
-      <h1>💰 Earn Money</h1>
-      <div class="balance" id="coinBal">0</div>
-      <span>Coins = ₹<span id="rsBal">0.00</span></span>
-    </div>
-
-    <div class="card">
-      <h3>📋 Daily Tasks</h3>
-      <button class="btn task-btn" onclick="completeTask(50)">
-        <div class="flex"><span>Install App</span><span>+50 Coins</span></div>
-      </button>
-      <button class="btn task-btn" onclick="completeTask(100)">
-        <div class="flex"><span>Complete Survey</span><span>+100 Coins</span></div>
-      </button>
-      <p class="small">*Demo buttons hain. Yahan TimeWall/BitLabs ka code lagega</p>
-    </div>
-
-    <div class="card">
-      <h3>👥 Refer & Earn</h3>
-      <div class="refer-box">
-        <p>Har dost ke join karne par 250 Coins</p>
-        <div class="refer-code" id="myRefCode">USER1234</div>
-        <button class="btn btn-blue" onclick="copyRef()">Copy Refer Link</button>
-        <p class="small" style="margin-top:8px">Note: Refer bonus 2 withdrawal ke baad milega</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>💳 Withdraw</h3>
-      <p class="small">100 Coins = 1₹ | Min Withdraw: 200 Coins = 2₹</p>
-      
-      <select id="wType" onchange="changeWithdrawType()">
-        <option value="upi">UPI - All Apps</option>
-        <option value="amazon">Amazon Gift Card - 10₹</option>
-        <option value="gplay">Google Play Gift Card - 10₹</option>
-        <option value="phonepe_gc">PhonePe Gift Card - 10₹</option>
-      </select>
-
-      <div id="upiOptions">
-        <p class="small" style="margin-top:10px">UPI App Choose Karo:</p>
-        <div class="upi-grid">
-          <div class="upi-option active" onclick="selectUpi('phonepe',this)">
-            <div>📱</div>PhonePe
-          </div>
-          <div class="upi-option" onclick="selectUpi('gpay',this)">
-            <div>🅶</div>GPay
-          </div>
-          <div class="upi-option" onclick="selectUpi('paytm',this)">
-            <div>💙</div>Paytm
-          </div>
-          <div class="upi-option" onclick="selectUpi('bhim',this)">
-            <div>🇮🇳</div>BHIM
-          </div>
-          <div class="upi-option" onclick="selectUpi('amazonpay',this)">
-            <div>📦</div>Amazon Pay
-          </div>
-          <div class="upi-option" onclick="selectUpi('other',this)">
-            <div>💰</div>Other UPI
-          </div>
-        </div>
-      </div>
-      
-      <select id="wAmount">
-        <option value="200">200 Coins = 2₹</option>
-        <option value="500">500 Coins = 5₹</option>
-        <option value="1000">1000 Coins = 10₹</option>
-        <option value="2500">2500 Coins = 25₹</option>
-        <option value="5000">5000 Coins = 50₹</option>
-      </select>
-      
-      <input type="text" id="wDetails" placeholder="UPI ID daalo: 9876543210@paytm">
-      <button class="btn btn-green" id="wBtn" onclick="withdraw()">Withdraw Now</button>
-      <p class="small">Total Withdrawals: <span id="wCount">0</span></p>
-    </div>
-
-    <div class="card">
-      <h3>📜 Withdraw History</h3>
-      <div id="history">Abhi koi withdrawal nahi</div>
-    </div>
+    <h1>🚀 EarnDost</h1>
+    <p>Survey complete karke Coins kamao</p>
+    <button id="loginBtn">Login with Google</button>
+    <button id="surveyBtn">Complete Survey & Earn Coins</button>
+    <button id="logoutBtn">Logout</button>
+    <div id="userInfo"></div>
   </div>
-
-<script>
-let data = JSON.parse(localStorage.getItem('earnMoney')) || {
-  coins: 0, 
-  withdrawals: 0,
-  pendingRef: 0,
-  history: [],
-  refCode: 'USER' + Math.floor(1000 + Math.random() * 9000),
-  selectedUpi: 'phonepe'
-};
-
-function updateUI() {
-  document.getElementById('coinBal').innerText = data.coins;
-  document.getElementById('rsBal').innerText = (data.coins/100).toFixed(2);
-  document.getElementById('wCount').innerText = data.withdrawals;
-  document.getElementById('myRefCode').innerText = data.refCode;
-  
-  let h = document.getElementById('history');
-  if(data.history.length === 0) {
-    h.innerHTML = 'Abhi koi withdrawal nahi';
-  } else {
-    h.innerHTML = data.history.map(x => 
-      `<p class="small">₹${x.amt} - ${x.type} - ${x.status}<br>To: ${x.to}</p><hr style="border:0;border-top:1px solid #333;margin:5px 0">`
-    ).join('');
-  }
-  
-  document.getElementById('wBtn').disabled = data.coins < 200;
-  saveData();
-}
-
-function saveData() {
-  localStorage.setItem('earnMoney', JSON.stringify(data));
-}
-
-function completeTask(coins) {
-  data.coins += coins;
-  alert(`+${coins} Coins added!`);
-  updateUI();
-}
-
-function copyRef() {
-  let link = window.location.href.split('?')[0] + '?ref=' + data.refCode;
-  navigator.clipboard.writeText(link);
-  alert('Refer link copied!');
-}
-
-function selectUpi(app, el) {
-  data.selectedUpi = app;
-  document.querySelectorAll('.upi-option').forEach(x => x.classList.remove('active'));
-  el.classList.add('active');
-  
-  let placeholder = {
-    phonepe: '9876543210@ybl ya 9876543210@axl',
-    gpay: '9876543210@okaxis ya 9876543210@okhdfcbank',
-    paytm: '9876543210@paytm',
-    bhim: '9876543210@upi',
-    amazonpay: '9876543210@apl',
-    other: 'Apna UPI ID daalo'
-  };
-  document.getElementById('wDetails').placeholder = placeholder[app];
-}
-
-function changeWithdrawType() {
-  let type = document.getElementById('wType').value;
-  document.getElementById('upiOptions').style.display = type === 'upi' ? 'block' : 'none';
-  document.getElementById('wDetails').placeholder = type === 'upi' ? 'UPI ID daalo' : 'Email ID daalo';
-}
-
-function withdraw() {
-  let amount = parseInt(document.getElementById('wAmount').value);
-  let type = document.getElementById('wType').value;
-  let details = document.getElementById('wDetails').value.trim();
-  
-  if(data.coins < amount) return alert('Coins kam hain! Min 200 coins chahiye');
-  if(details.length < 5) return alert('UPI ID ya Email sahi daalo');
-  
-  if(type === 'upi' && !details.includes('@')) {
-    return alert('UPI ID galat hai. Example: 9876543210@paytm');
-  }
-  
-  if(type !== 'upi' && amount < 1000) {
-    return alert('Gift Card minimum 10₹ = 1000 coins');
-  }
-  
-  let withdrawType = type === 'upi' ? `UPI-${data.selectedUpi.toUpperCase()}` : type.toUpperCase();
-  
-  data.coins -= amount;
-  data.withdrawals++;
-  data.history.unshift({
-    amt: amount/100, 
-    type: withdrawType, 
-    status: 'Pending - 24 hours me',
-    to: details
-  });
-  
-  if(data.withdrawals === 2 && data.pendingRef > 0) {
-    data.coins += data.pendingRef;
-    alert(`🎉 Refer Bonus ₹${data.pendingRef/100} unlocked!`);
-    data.pendingRef = 0;
-  }
-  
-  alert('✅ Withdraw request sent! 24 hours me payment aa jayega');
-  document.getElementById('wDetails').value = '';
-  updateUI();
-} 
-  const googleClientId = "190098170130-6tohb5lek3917r62fhru84oh770rcn50.apps.googleusercontent.com";
-
-  window.onload = function() {
-
-window.onload = function() {
-  updateUI();
-  changeWithdrawType();
-  let url = new URL(window.location.href);
-  if(url.searchParams.get('ref')) {
-    console.log('Refer from:', url.searchParams.get('ref'));
-  }
-}
-
-function addRefer() {
-  if(data.withdrawals >= 2) {
-    data.coins += 250;
-    alert('+250 Coins Refer Bonus Added!');
-  } else {
-    data.pendingRef += 250;
-    alert('Refer detected! 250 coins 2 withdrawal ke baad milenge');
-  }
-  updateUI();
-}
-</script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "Yaha_Config_se_apiKey_paste_karo",
+      authDomain: "earn-dost-d8c85.firebaseapp.com",
+      projectId: "earn-dost-d8c85",
+      storageBucket: "earn-dost-d8c85.appspot.com",
+      messagingSenderId: "1019395758465",
+      appId: "1:1019395758465:web:5298eede37878a87e17080"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const surveyBtn = document.getElementById('surveyBtn');
+    const userInfo = document.getElementById('userInfo');
+    loginBtn.onclick = () => { signInWithPopup(auth, provider) };
+    logoutBtn.onclick = () => { signOut(auth); };
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        userInfo.innerHTML = `Hi, ${user.displayName} 👋<br>Coins: 0`;
+        loginBtn.style.display = 'none';
+        surveyBtn.style.display = 'block';
+        logoutBtn.style.display = 'block';
+      } else {
+        userInfo.innerHTML = '';
+        loginBtn.style.display = 'block';
+        surveyBtn.style.display = 'none';
+        logoutBtn.style.display = 'none';
+      }
+    });
+    surveyBtn.onclick = () => { window.open("https://www.cpx-research.com/", "_blank"); };
+  </script>
 </body>
 </html>
