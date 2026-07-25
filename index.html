@@ -225,8 +225,13 @@ const auth = getAuth();
        pending: 0
      });
    }
+   } else { // YE ADD KARO
+  await updateDoc(userRef, {
+    name: snap.data().name || user.displayName || user.email.split('@')[0]
+  });
+ }
    
-   document.getElementById('user-name').innerText = snap.data()?.name || user.displayName; 
+   document.getElementById('user-name').innerText = snap.data()?.name || user.displayName || user.email.split('@')[0];
  } else {
   }
 });                               
