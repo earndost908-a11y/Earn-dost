@@ -152,6 +152,13 @@
       if(refId) checkReferral(refId, user.uid);
     } else {
       showPage('loginPage');
+      }
+}); // onAuthStateChanged ka ) }
+
+document.getElementById("logoutBtn").onclick = async () => {
+  await signOut(auth);
+  window.location.reload();
+}
       document.getElementById('loginPage').style.display = 'block';
     }
   });
