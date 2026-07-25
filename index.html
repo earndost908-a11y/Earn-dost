@@ -1,63 +1,226 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <title>EarnDost</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EarnDost - Survey Karke Paise Kamao</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; background: #f0f2f5; margin: 0; padding: 20px; }
-    .container { max-width: 400px; margin: 50px auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    h1 { color: #1877f2; }
-    button { background: #1877f2; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 8px; cursor: pointer; margin: 10px; width: 100%; }
-    button:hover { background: #0d65d9; }
-    #surveyBtn { background: #28a745; display: none; }
-    #logoutBtn { background: #dc3545; display: none; }
-    #userInfo { margin-top: 20px; font-weight: bold; }
+    body { background: #0a0e1a; color: white; font-family: Arial; margin: 0; padding-bottom: 80px; }
+  .page { display: none; padding: 20px; }
+  .active { display: block; }
+  .balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
+  .card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
+    button { background: #0072ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; }
+    button:disabled { background: #444; cursor: not-allowed; }
+    input { width: 90%; padding: 10px; border-radius: 8px; border: none; background: #2a3042; color: white; }
+  .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
+  .nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
+  .nav-item.active { color: #00c6ff; }
+  .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
+  .offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🚀 EarnDost</h1>
-    <p>Survey complete karke Coins kamao</p>
-    <button id="loginBtn">Login with Google</button>
-    <button id="surveyBtn">Complete Survey & Earn Coins</button>
-    <button id="logoutBtn">Logout</button>
-    <div id="userInfo"></div>
+
+<!-- 1. HOME PAGE -->
+<div class="page active" id="homePage">
+  <h2>EarnDost</h2>
+  <div class="balance-card">
+    <p>Current Balance</p>
+    <h1>₹<span id="rupee">0.00</span></h1>
+    <p><span id="coins">0</span> Coins</p>
+    <button onclick="showPage('walletPage')">Withdraw</button>
   </div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
-      authDomain: "earn-dost-d8c85.firebaseapp.com",
-      projectId: "earn-dost-d8c85",
-      storageBucket: "earn-dost-d8c85.appspot.com",
-      messagingSenderId: "1019395758465",
-      appId: "1:1019395758465:web:5298eede37878a87e17080"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const surveyBtn = document.getElementById('surveyBtn');
-    const userInfo = document.getElementById('userInfo');
-    loginBtn.onclick = () => { signInWithPopup(auth, provider) };
-    logoutBtn.onclick = () => { signOut(auth); };
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        userInfo.innerHTML = `Hi, ${user.displayName} 👋<br>Coins: 0`;
-        loginBtn.style.display = 'none';
-        surveyBtn.style.display = 'block';
-        logoutBtn.style.display = 'block';
-      } else {
-        userInfo.innerHTML = '';
-        loginBtn.style.display = 'block';
-        surveyBtn.style.display = 'none';
-        logoutBtn.style.display = 'none';
+  <div class="card">
+    <p>⏳ <b>Pending Coins:</b> <span id="pending">0</span> <br><small>Under Review</small></p>
+  </div>
+  <div class="card">
+    <h4>🎁 Daily Login Bonus</h4>
+    <p>Claim +10 Coins every day</p>
+    <button id="dailyBtn" onclick="dailyBonus()">Claim</button>
+    <p id="dailyTimer" style="font-size:12px; color:#aaa;"></p>
+  </div>
+</div>
+
+<!-- 2. OFFERS PAGE -->
+<div class="page" id="offersPage">
+  <h2>Earn Coins</h2>
+  <div class="offer-card" style="background: linear-gradient(135deg, #00c6ff, #0072ff);">
+    <h3>CPX Research</h3>
+    <button onclick="completeTask('CPX Survey', 10)">Start +10 Coins</button>
+  </div>
+</div>
+
+<!-- 3. SURVEY PAGE -->
+<div class="page" id="surveyPage"><h2>Survey Information</h2></div>
+
+<!-- 4. WALLET PAGE -->
+<div class="page" id="walletPage">
+  <h2>Wallet</h2>
+  <div class="balance-card">
+    <h1>₹<span id="rupee2">0.00</span></h1>
+    <p><span id="coins2">0</span> Coins</p>
+  </div>
+  <input id="upi" placeholder="UPI ID dalo">
+  <button onclick="withdraw()">Withdraw Request</button>
+</div>
+
+<!-- 5. HISTORY PAGE -->
+<div class="page" id="historyPage"><h2>Task History</h2><div id="historyList">Loading...</div></div>
+
+<!-- 6. PROFILE PAGE -->
+<div class="page" id="profilePage">
+  <div class="balance-card">
+    <h3 id="userEmail">User</h3>
+    <p><span id="coins3">0</span> Coins | <span id="refCount">0</span> Referrals</p>
+  </div>
+  <div class="card">
+    <h3>Invite & Earn</h3>
+    <input id="refLink" readonly>
+    <button onclick="copyLink()">Copy Link</button>
+  </div>
+</div>
+
+<!-- BOTTOM MENU -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="showPage('homePage')">Home</div>
+  <div class="nav-item" onclick="showPage('offersPage')">Offers</div>
+  <div class="nav-item" onclick="showPage('surveyPage')">Survey</div>
+  <div class="nav-item" onclick="showPage('walletPage')">Wallet</div>
+  <div class="nav-item" onclick="showPage('historyPage')">History</div>
+  <div class="nav-item" onclick="showPage('profilePage')">Profile</div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = { / AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE / };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  let currentUser;
+  const COIN_RATE = 100; // 100 coins = 1 Rs
+
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    event.target.classList.add('active');
+    if(id == 'historyPage') loadHistory();
+  }
+  window.showPage = showPage;
+
+  onAuthStateChanged(auth, async (user)=>{
+    if(user){
+      currentUser = user;
+      const userRef = doc(db,"users",user.uid);
+      const snap = await getDoc(userRef);
+
+      if(!snap.exists()){
+        await setDoc(userRef, {
+          coins: 0, pending: 0, referrals: 0,
+          lastDailyClaim: null // daily ke liye naya field
+        });
       }
+      loadData(user.uid);
+      checkDailyBonus(); // page load hote hi check karega
+    }
+  });
+
+  async function loadData(uid){
+    const snap = await getDoc(doc(db,"users",uid));
+    const data = snap.data();
+    document.getElementById("coins").innerText = data.coins;
+    document.getElementById("coins2").innerText = data.coins;
+    document.getElementById("coins3").innerText = data.coins;
+    document.getElementById("rupee").innerText = (data.coins/COIN_RATE).toFixed(2);
+    document.getElementById("rupee2").innerText = (data.coins/COIN_RATE).toFixed(2);
+    document.getElementById("pending").innerText = data.pending || 0;
+    document.getElementById("refCount").innerText = data.referrals || 0;
+    document.getElementById("userEmail").innerText = currentUser.email.split("@")[0];
+    document.getElementById("refLink").value = window.location.origin + "?ref=" + uid;
+  }
+
+  async function addHistory(uid, task, coins){
+    await addDoc(collection(db, "transactions"), {
+      uid: uid, task: task, coins: coins,
+      rupee: (coins/COIN_RATE).toFixed(2),
+      date: serverTimestamp()
     });
-    surveyBtn.onclick = () => { window.open("https://www.cpx-research.com/", "_blank"); };
-  </script>
+  }
+
+  // DAILY BONUS CHECK - 24 HOURS
+  async function checkDailyBonus(){
+    const snap = await getDoc(doc(db,"users",currentUser.uid));
+    const lastClaim = snap.data().lastDailyClaim;
+    const btn = document.getElementById("dailyBtn");
+    const timer = document.getElementById("dailyTimer");
+
+    if(lastClaim){
+      const lastDate = lastClaim.toDate();
+      const now = new Date();
+      const diffHours = (now - lastDate) / (1000 * 60 * 60);
+
+      if(diffHours < 24){
+        btn.disabled = true;
+        btn.innerText = "Claimed ✓";
+        let hoursLeft = 24 - Math.floor(diffHours);
+        timer.innerText = `Next claim in ${hoursLeft} hours`;
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Claim +10 Coins";
+        timer.innerText = "";
+      }
+    }
+  }
+
+  // DAILY BONUS CLAIM
+  window.dailyBonus = async function(){
+    await updateDoc(doc(db,"users",currentUser.uid), {
+      coins: increment(10),
+      lastDailyClaim: serverTimestamp()
+    });
+    await addHistory(currentUser.uid, "Daily Login Bonus", 10);
+    alert("+10 Coins Claimed! 🎉");
+    loadData(currentUser.uid);
+    checkDailyBonus();
+  }
+
+  window.completeTask = async function(task, coins){
+    await updateDoc(doc(db,"users",currentUser.uid), {pending: increment(coins)});
+    await addHistory(currentUser.uid, task, coins);
+    alert(`${coins} Coins Pending me gaye!`);
+    loadData(currentUser.uid);
+  }
+
+  window.withdraw = async function(){
+    const upi = document.getElementById("upi").value;
+    if(!upi) return alert("UPI dalo");
+    await addDoc(collection(db, "withdrawals"), {
+      uid: currentUser.uid, upi: upi,
+      amount: document.getElementById("rupee2").innerText,
+      status: "Pending", date: serverTimestamp()
+    });
+    alert("Withdraw request bhej di gayi!");
+  }
+
+  async function loadHistory(){
+    const q = query(collection(db, "transactions"), where("uid", "==", currentUser.uid));
+    const snap = await getDocs(q);
+    let html = "";
+    snap.forEach(doc=>{
+      const d = doc.data();
+      html += `<div class="history-item"><span>${d.task}</span><span>+${d.coins} Coins</span></div>`;
+    });
+    document.getElementById("historyList").innerHTML = html || "No history yet";
+  }
+
+  window.copyLink = function(){ navigator.clipboard.writeText(document.getElementById("refLink").value); alert("Copied!"); }
+
+</script>
 </body>
 </html>
