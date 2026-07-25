@@ -193,6 +193,14 @@
     window.copyLink = function(){ navigator
 
 const auth = getAuth();
+  const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById('user-name').innerText = user.displayName || user.email;
+  } else {
+    window.location.href = "login.html"
+  }
+});                               
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById('user-name').innerText = user.displayName || user.email;
