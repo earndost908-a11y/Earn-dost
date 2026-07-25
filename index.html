@@ -28,6 +28,7 @@
 <div class="page active" id="loginPage">
   <div class="card">
     <h2>🚀 EarnDost Login</h2>
+    <input type="text" id="name" placeholder="Apna Naam" required>
     <input id="email" type="email" placeholder="Email ID">
     <input id="password" type="password" placeholder="Password">
     <button onclick="signup()">Sign Up</button>
@@ -79,6 +80,19 @@
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  async function signup() {
+  const name = document.getElementById('name').value
+  const email = document.getElementById('email').value
+  const password = document.getElementById('password').value
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+    await updateProfile(userCredential.user, { displayName: name }) // YE NAAM SAVE KAREGA
+    alert("Signup Success! 🎉")
+    window.location.href = "dashboard.html"
+  } catch (error) {
+    alert(error.message)
+  }
   const db = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
