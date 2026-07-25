@@ -212,12 +212,22 @@ document.getElementById("logoutBtn").onclick = async () => {
     window.copyLink = function(){ navigator
 
 const auth = getAuth();
-  const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById('user-name').innerText = user.displayName || user.email;
-  } else {
-    window.location.href = "login.html"
+   onAuthStateChanged(auth, async (user) => { // async add karo
+ if (user) {
+   const userRef = doc(db, "users", user.uid); // Line NAYI
+   const snap = await getDoc(userRef); // Line NAYI
+   
+   if(!snap.exists()){ // Line NAYI - YE WALA BLOCK ADD KARO
+     await setDoc(userRef, {
+       name: user.displayName || user.email.split('@')[0],
+       email: user.email,
+       coins: 0, 
+       pending: 0
+     });
+   }
+   
+   document.getElementById('user-name').innerText = snap.data()?.name || user.displayName; 
+ } else {
   }
 });                               
 </script>
