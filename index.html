@@ -1,240 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>EarnDost</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { background: #0a0e1a; color: white; font-family: Arial; margin: 0; padding-bottom: 80px; }
-.page { display: none; padding: 20px; }
-.active { display: block; }
-.balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
-.card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
-    button { background: #0072ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; }
-    button:disabled { background: #444; cursor: not-allowed; }
-    input { width: 90%; padding: 10px; border-radius: 8px; border: none; background: #2a3042; color: white; }
-.bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
-.nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
-.nav-item.active { color: #00c6ff; }
-.history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
-.offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
-.gift-card { display:flex; justify-content:space-between; align-items:center; background:#2a3042; padding:15px; border-radius:12px; margin:10px 0; }
-.google-btn { background: white; color: black; display:flex; align-items:center; justify-content:center; gap:10px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnDost</title>
+<style>
+ body{background:#0a0a0a;color:#fff;font-family:sans-serif;margin:0;padding-bottom:70px}
+ .page{display:none;padding:15px}
+ .page.active{display:block}
+ .card{background:linear-gradient(135deg,#00c6ff,#0072ff);padding:20px;border-radius:15px;text-align:center;margin-bottom:15px}
+ .card h2{margin:0;font-size:22px}
+ .card p{margin:5px 0 0;font-size:14px}
+ .box{background:#1a1a1a;padding:15px;border-radius:12px;margin-bottom:15px}
+ .box input{width:100%;padding:10px;background:#2a2a2a;border:none;color:#fff;border-radius:8px;margin:10px 0;box-sizing:border-box}
+ .btn{width:100%;padding:12px;background:#0072ff;border:none;color:#fff;font-weight:bold;border-radius:8px;cursor:pointer;margin-top:8px}
+ .btn-google{background:#db4437}
+ nav{position:fixed;bottom:0;width:100%;background:#111;display:flex;justify-content:space-around;padding:8px 0;z-index:99}
+ nav a{color:#888;text-decoration:none;font-size:11px;text-align:center}
+ nav a.active{color:#00c6ff}
+ #loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:flex;justify-content:center;align-items:center;z-index:999}
+</style>
 </head>
 <body>
 
-<div class="page active" id="loginPage">
-  <div class="card">
-    <h2>🚀 EarnDost Login</h2>
-    <input type="text" id="name" placeholder="Apna Naam" required>
-    <input id="email" type="email" placeholder="Email ID">
-    <input id="password" type="password" placeholder="Password">
-    <button onclick="signup()">Sign Up</button>
-    <button onclick="login()" style="background:#555;">Login</button>
-    <p style="text-align:center; color:#aaa;">ya</p>
-    <button class="google-btn" onclick="googleLogin()">
-      <img src="https://www.google.com/favicon.ico" width="18"> Google se Login
-    </button>
+<div id="loader">Loading...</div>
+
+<!-- HOME -->
+<div id="home" class="page">
+  <h2>Welcome <span id="home-name">User</span></h2>
+  <div class="card"><h2 id="home-coins">0 Coins</h2><p>Earn more by completing offers</p></div>
+  <div class="box"><h3>Daily Check-in</h3><button class="btn" onclick="alert('Coming Soon')">Claim 10 Coins</button></div>
+</div>
+
+<!-- OFFERS -->
+<div id="offers" class="page"><h2>Offers</h2><div class="box"><p>App Install - 50 Coins</p><button class="btn">Start</button></div></div>
+
+<!-- STORE -->
+<div id="store" class="page"><h2>Store</h2><div class="box"><p>Redeem Gift Cards</p><button class="btn">View</button></div></div>
+
+<!-- WALLET -->
+<div id="wallet" class="page">
+  <h2>Wallet</h2>
+  <div class="card"><h2 id="wallet-coins">0 Coins</h2><p>Available Balance</p></div>
+  <button class="btn" onclick="showPage('withdrawal')">Withdraw</button>
+</div>
+
+<!-- WITHDRAWAL -->
+<div id="withdrawal" class="page">
+  <h2>Withdraw</h2>
+  <div class="box">
+    <input type="text" id="upi" placeholder="UPI ID">
+    <input type="number" id="amount" placeholder="Min 500 Coins">
+    <button class="btn" onclick="alert('Request Sent')">Request Withdrawal</button>
   </div>
 </div>
 
-<div class="page" id="homePage"><h2>EarnDost</h2>
-  <div class="balance-card"><p>Current Balance</p><h1>₹<span id="rupee">0.00</span></h1><p><span id="coins">0</span> Coins</p><button onclick="showPage('storePage')">Redeem Gift Card</button></div>
-  <div class="card"><p>⏳ <b>Pending Coins:</b> <span id="pending">0</span> <br><small>Under Review</small></p></div>
-  <div class="card"><h4>🎁 Daily Login Bonus</h4><p>Claim +10 Coins every day</p><button id="dailyBtn" onclick="dailyBonus()">Claim</button><p id="dailyTimer" style="font-size:12px; color:#aaa;"></p></div>
+<!-- HISTORY -->
+<div id="history" class="page"><h2>History</h2><div class="box"><p>No transactions yet</p></div></div>
+
+<!-- REFER -->
+<div id="refer" class="page">
+  <h2>Invite & Earn 250 Coins</h2>
+  <div class="box">
+    <input type="text" id="referral-link" readonly>
+    <button class="btn" onclick="copyLink()">Copy Link</button>
+  </div>
+  <p>Total Referrals: <span id="refer-count">0</span></p>
 </div>
 
-<div class="page" id="offersPage"><h2>Earn Coins</h2><div class="offer-card" style="background: linear-gradient(135deg, #00c6ff, #0072ff);"><h3>CPX Research</h3><button onclick="completeTask('CPX Survey', 10)">Start +10 Coins</button></div></div>
-<div class="page" id="surveyPage"><h2>Survey Information</h2></div>
-<div class="page" id="walletPage"><h2>Wallet</h2><div class="balance-card"><h1>₹<span id="rupee2">0.00</span></h1><p><span id="coins2">0</span> Coins</p></div><input id="upi" placeholder="UPI ID dalo"><button onclick="withdraw()">Withdraw Request</button><button onclick="logout()" style="background:red;">Logout</button></div>
-<div class="page" id="historyPage"><h2>Task History</h2><div id="historyList">Loading...</div></div>
-<div class="page" id="storePage"><h2>🎁 Redeem Store</h2><div class="gift-card"><div><h4>Google Play ₹10</h4><p>1000 Coins</p></div><button onclick="redeemGift('Google Play ₹10', 1000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Amazon ₹10</h4><p>1000 Coins</p></div><button onclick="redeemGift('Amazon ₹10', 1000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Google Play ₹50</h4><p>5000 Coins</p></div><button onclick="redeemGift('Google Play ₹50', 5000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Amazon ₹50</h4><p>5000 Coins</p></div><button onclick="redeemGift('Amazon ₹50', 5000)" style="width:100px;">Redeem</button></div></div>
-<div class="page" id="profilePage"><div class="balance-card"><h3 id="userEmail">User</h3><p><span id="coins3">0</span> Coins | <span id="refCount">0</span> Referrals</p></div><div class="card"><h3>Invite & Earn 250 Coins</h3><input id="refLink" readonly><button onclick="copyLink()">Copy Link</button></div></div>
-
-<div class="bottom-nav">
-  <div class="nav-item active" onclick="showPage('homePage')">Home</div>
-  <div class="nav-item" onclick="showPage('offersPage')">Offers</div>
-  <div class="nav-item" onclick="showPage('storePage')">Store</div>
-  <div class="nav-item" onclick="showPage('walletPage')">Wallet</div>
-  <div class="nav-item" onclick="showPage('historyPage')">History</div>
-  <div class="nav-item" onclick="showPage('profilePage')">Profile</div>
+<!-- PROFILE -->
+<div id="profile" class="page">
+  <div class="card">
+    <h2 id="profile-name">User</h2>
+    <p id="profile-stats">0 Coins | 0 Referrals</p>
+  </div>
+  <div class="box">
+    <p>Email: <span id="profile-email"></span></p>
+    <button class="btn" onclick="logout()">Logout</button>
+  </div>
 </div>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+  <h2>Login</h2>
+  <div class="box">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="btn" onclick="login()">Login with Email</button>
+    <button class="btn btn-google" onclick="googleLogin()">1 Click - Login with Google</button>
+  </div>
+</nav>
+
+<nav id="navbar" style="display:none">
+  <a href="#" onclick="showPage('home')">Home</a>
+  <a href="#" onclick="showPage('offers')">Offers</a>
+  <a href="#" onclick="showPage('store')">Store</a>
+  <a href="#" onclick="showPage('wallet')">Wallet</a>
+  <a href="#" onclick="showPage('history')">History</a>
+  <a href="#" onclick="showPage('refer')">Refer</a>
+  <a href="#" onclick="showPage('profile')">Profile</a>
+</nav>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // 🔥 SIRF IN 3 JAGAH APNA WALA DALO 🔥
   const firebaseConfig = {
     apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
-  authDomain: "earn-dost-d8c85.firebaseapp.com",
-  projectId: "earn-dost-d8c85",
-  storageBucket: "earn-dost-d8c85.firebasestorage.app",
-  messagingSenderId: "1019395758465",
-  appId: "1:1019395758465:web:5298eede37878a87e17080",
-  measurementId: "G-MLNM7D7BZQ"
+    authDomain: "earn-dost-d8c85.firebaseapp.com",
+    projectId: "earn-dost-d8c85",
+    storageBucket: "earn-dost-d8c85.firebasestorage.app",
+    messagingSenderId: "1019395758465",
+    appId: "1:1019395758465:web:5298eede37878a87e17080",
+    measurementId: "G-MLNM7D7BZQ"
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  async function signup() {
-  const name = document.getElementById('name').value
-  const email = document.getElementById('email').value
-  const password = document.getElementById('password').value
+  const auth = getAuth();
+  const db = getFirestore();
+  const provider = new GoogleAuthProvider(); // GOOGLE KE LIYE
+  let currentUserData = {};
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-    await updateProfile(userCredential.user, { displayName: name }) // YE NAAM SAVE KAREGA
-    alert("Signup Success! 🎉")
-    window.location.href = "dashboard.html"
-  } catch (error) {
-    alert(error.message)
-  }
-  const db = getFirestore(app);
-  const provider = new GoogleAuthProvider();
-
-  let currentUser;
-  const COIN_RATE = 100;
-
-  function showPage(id){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    if(event && event.target) event.target.classList.add('active');
-    if(id == 'historyPage') loadHistory();
-  }
-  window.showPage = showPage;
-
-  window.googleLogin = async function(){ try{ await signInWithPopup(auth, provider); } catch(e){ alert(e.message) } }
-  window.signup = async function(){ const email = document.getElementById("email").value; const pass = document.getElementById("password").value; if(!email ||!pass) return alert("Email Password dalo"); try{ await createUserWithEmailAndPassword(auth, email, pass); } catch(e){ alert(e.message) } }
-  window.login = async function(){ const email = document.getElementById("email").value; const pass = document.getElementById("password").value; if(!email ||!pass) return alert("Email Password dalo"); try{ await signInWithEmailAndPassword(auth, email, pass); } catch(e){ alert(e.message) } }
-  window.logout = async function(){ await signOut(auth); }
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const refId = urlParams.get('ref');
-
-  async function checkReferral(referrerId, newUserId){
-    if(referrerId === newUserId) return;
-    const newUserRef = doc(db,"users",newUserId);
-    const newUserSnap = await getDoc(newUserRef);
-    if(newUserSnap.exists() &&!newUserSnap.data().referredBy){
-      const referrerRef = doc(db,"users",referrerId);
-      await updateDoc(referrerRef, { coins: increment(250), referrals: increment(1) });
-      await addHistory(referrerId, "Referral Reward", 250);
-      await updateDoc(newUserRef, { referredBy: referrerId });
-      alert("Referral Success! Tumhe 250 Coins mile 🎉");
-    }
+  window.showPage = (pageId) => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    document.querySelector(`nav a[onclick="showPage('${pageId}')"]`)?.classList.add('active');
   }
 
-  onAuthStateChanged(auth, async (user)=>{
-    if(user){
-      currentUser = user;
-      document.getElementById('loginPage').style.display = 'none';
-      showPage('homePage');
-      const userRef = doc(db,"users",user.uid);
-import { getDoc, setDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-} else {
-  // PURANE USER KE LIYE YE ADD KARO
-  await updateDoc(userRef, {
-    name: snap.data().name || user.displayName || user.email.split('@')[0],
-    email: user.email
-  });
+  onAuthStateChanged(auth, async (user) => {
+    document.getElementById('loader').style.display = 'none';
+    if (user) {
+      document.getElementById('navbar').style.display = 'flex';
+      const userRef = doc(db, "users", user.uid);
+      const snap = await getDoc(userRef);
+
+      if(!snap.exists()){
+        currentUserData = {
+          name: user.displayName || user.email.split('@')[0], 
+          email: user.email, photo: user.photoURL || "",
+          coins: 0, pending: 0, referrals: 0, referredBy: null, 
+          lastDailyClaim: 0, createdAt: new Date()
+        };
+        await setDoc(userRef, currentUserData);
+      } else {
+        currentUserData = snap.data();
       }
-      loadData(user.uid);
 
-// YE 1 LINE ADD KARO
-document.getElementById('userName').innerText = snap.data()?.name || user.displayName || user.email.split('@')[0];
+      document.getElementById('profile-name').innerText = currentUserData.name;
+      document.getElementById('home-name').innerText = currentUserData.name;
+      document.getElementById('profile-email').innerText = currentUserData.email;
+      document.getElementById('profile-stats').innerText = `${currentUserData.coins} Coins | ${currentUserData.referrals} Referrals`;
+      document.getElementById('home-coins').innerText = `${currentUserData.coins} Coins`;
+      document.getElementById('wallet-coins').innerText = `${currentUserData.coins} Coins`;
+      document.getElementById('refer-count').innerText = currentUserData.referrals;
+      document.getElementById('referral-link').value = `https://earndost.netlify.app/?ref=${user.uid}`;
+      
+      showPage('home');
 
-checkDailyBonus();
-      checkDailyBonus();
-      if(refId) checkReferral(refId, user.uid);
     } else {
-      showPage('loginPage');
-      }
-}); // onAuthStateChanged ka ) }
-
-document.getElementById("logoutBtn").onclick = async () => {
-  await signOut(auth);
-  window.location.reload();
-}
-      document.getElementById('loginPage').style.display = 'block';
+      document.getElementById('navbar').style.display = 'none';
+      showPage('login');
     }
   });
 
-  async function loadData(uid){
-    const snap = await getDoc(doc(db,"users",uid));
-    const data = snap.data();
-    document.getElementById("coins").innerText = data.coins;
-    document.getElementById("coins2").innerText = data.coins;
-    document.getElementById("coins3").innerText = data.coins;
-    document.getElementById("rupee").innerText = (data.coins/COIN_RATE).toFixed(2);
-    document.getElementById("rupee2").innerText = (data.coins/COIN_RATE).toFixed(2);
-    document.getElementById("pending").innerText = data.pending || 0;
-    document.getElementById("refCount").innerText = data.referrals || 0;
-    document.getElementById("userEmail").innerText = currentUser.displayName || currentUser.email.split("@")[0];
-    document.getElementById("refLink").value = window.location.origin + "?ref=" + uid;
+  // EMAIL LOGIN
+  window.login = async () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    try{ await signInWithEmailAndPassword(auth, email, password); }
+    catch(e){ alert(e.message); }
+  }
+  
+  // 1 CLICK GOOGLE LOGIN
+  window.googleLogin = async () => {
+    try{ await signInWithPopup(auth, provider); }
+    catch(e){ alert(e.message); }
   }
 
-  async function addHistory(uid, task, coins){ await addDoc(collection(db, "transactions"), { uid: uid, task: task, coins: coins, rupee: (coins/COIN_RATE).toFixed(2), date: serverTimestamp() }); }
+  window.logout = async () => { await signOut(auth); }
 
-  async function checkDailyBonus(){
-    const snap = await getDoc(doc(db,"Welcome <span id="user-name">User</span>",currentUser.uid));
-    const lastClaim = snap.data().lastDailyClaim;
-    const btn = document.getElementById("dailyBtn");
-    const timer = document.getElementById("dailyTimer");
-    if(lastClaim){
-      const lastDate = lastClaim.toDate();
-      const now = new Date();
-      const diffHours = (now - lastDate) / (1000 * 60 * 60);
-      if(diffHours < 24){ btn.disabled = true; btn.innerText = "Claimed ✓"; let hoursLeft = 24 - Math.floor(diffHours); timer.innerText = `Next claim in ${hoursLeft} hours`; }
-      else { btn.disabled = false; btn.innerText = "Claim +10 Coins"; timer.innerText = ""; }
-    }
+  window.copyLink = () => {
+    document.getElementById('referral-link').select();
+    document.execCommand('copy');
+    alert("Link Copied!");
   }
 
-  window.dailyBonus = async function(){ await updateDoc(doc(db,"users",currentUser.uid), { coins: increment(10), lastDailyClaim: serverTimestamp() }); await addHistory(currentUser.uid, "Daily Login Bonus", 10); alert("+10 Coins Claimed! 🎉"); loadData(currentUser.uid); checkDailyBonus(); }
-  window.completeTask = async function(task, coins){ await updateDoc(doc(db,"users",currentUser.uid), {pending: increment(coins)}); await addHistory(currentUser.uid, task, coins); alert(`${coins} Coins Pending me gaye!`); loadData(currentUser.uid); }
-  window.withdraw = async function(){ const upi = document.getElementById("upi").value; if(!upi) return alert("UPI dalo"); await addDoc(collection(db, "withdrawals"), { uid: currentUser.uid, upi: upi, amount: document.getElementById("rupee2").innerText, status: "Pending", date: serverTimestamp() }); alert("Withdraw request bhej di gayi!"); }
-  window.redeemGift = async function(cardName, coinCost){ const userRef = doc(db,"users",currentUser.uid); const snap = await getDoc(userRef); const userCoins = snap.data().coins; if(userCoins < coinCost) return alert("Coins kam hai!"); await updateDoc(userRef, { coins: increment(-coinCost) }); await addDoc(collection(db, "redeems"), { uid: currentUser.uid, item: cardName, coins: coinCost, status: "Processing", date: serverTimestamp() }); await addHistory(currentUser.uid, "Redeemed: " + cardName, -coinCost); alert(`${cardName} ke liye request bhej di gayi! 24 ghante me code mil jayega.`); loadData(currentUser.uid); }
-
-  async function loadHistory(){
-    const q = query(collection(db, "transactions"), where("uid", "==", currentUser.uid));
-    const snap = await getDocs(q);
-    let html = "";
-    snap.forEach(doc=>{ const d = doc.data(); html += `<div class="history-item"><span>${d.task}</span><span>${d.coins>0?'+':''}${d.coins} Coins</span></div>`; });
-    document.getElementById("historyList").innerHTML = html || "No history yet";
-  }
-
-  window.copyLink = function(){ navigator.clipboard.writeText(document.getElementById("refLink").value); alert("Copied!"); }
-    window.copyLink = function(){ navigator
-
-const auth = getAuth();
-   onAuthStateChanged(auth, async (user) => { // async add karo
- if (user) {
-   const userRef = doc(db, "users", user.uid); // Line NAYI
-   const snap = await getDoc(userRef); // Line NAYI
-   
-   if(!snap.exists()){ // Line NAYI - YE WALA BLOCK ADD KARO
-     await setDoc(userRef, {
-       name: user.displayName || user.email.split('@')[0],
-       email: user.email,
-       coins: 0, 
-       pending: 0
-     });
-   }
-   } else { // YE ADD KARO
-  await updateDoc(userRef, {
-    name: snap.data().name || user.displayName || user.email.split('@')[0]
-  });
- }
-   
-   document.getElementById('user-name').innerText = snap.data()?.name || user.displayName || user.email.split('@')[0];
- } else {
-  }
-});                               
 </script>
 </body>
 </html>
