@@ -5,27 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { background: #0a0e1a; color: white; font-family: Arial; margin: 0; padding-bottom: 80px; }
- .page { display: none; padding: 20px; }
- .active { display: block; }
- .balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
- .card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
- .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
- .stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
+.page { display: none; padding: 20px; }
+.active { display: block; }
+.balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
+.card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
     button { background: #0072ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; }
     button:disabled { background: #444; cursor: not-allowed; }
     input { width: 90%; padding: 10px; border-radius: 8px; border: none; background: #2a3042; color: white; }
- .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
- .nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
- .nav-item.active { color: #00c6ff; }
- .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
- .offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
- .gift-card { display:flex; justify-content:space-between; align-items:center; background:#2a3042; padding:15px; border-radius:12px; margin:10px 0; }
- .google-btn { background: white; color: black; display:flex; align-items:center; justify-content:center; gap:10px; }
+.bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
+.nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
+.nav-item.active { color: #00c6ff; }
+.history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
+.offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
+.gift-card { display:flex; justify-content:space-between; align-items:center; background:#2a3042; padding:15px; border-radius:12px; margin:10px 0; }
+.google-btn { background: white; color: black; display:flex; align-items:center; justify-content:center; gap:10px; }
   </style>
 </head>
 <body>
 
-<!-- 0. LOGIN PAGE - NAYA -->
 <div class="page active" id="loginPage">
   <div class="card">
     <h2>🚀 EarnDost Login</h2>
@@ -40,88 +39,19 @@
   </div>
 </div>
 
-<!-- 1. HOME PAGE -->
-<div class="page" id="homePage">
-  <h2>EarnDost</h2>
-  <div class="balance-card">
-    <p>Current Balance</p>
-    <h1>₹<span id="rupee">0.00</span></h1>
-    <p><span id="coins">0</span> Coins</p>
-    <button onclick="showPage('storePage')">Redeem Gift Card</button>
-  </div>
-  <div class="card">
-    <p>⏳ <b>Pending Coins:</b> <span id="pending">0</span> <br><small>Under Review</small></p>
-  </div>
-  <div class="card">
-    <h4>🎁 Daily Login Bonus</h4>
-    <p>Claim +10 Coins every day</p>
-    <button id="dailyBtn" onclick="dailyBonus()">Claim</button>
-    <p id="dailyTimer" style="font-size:12px; color:#aaa;"></p>
-  </div>
+<div class="page" id="homePage"><h2>EarnDost</h2>
+  <div class="balance-card"><p>Current Balance</p><h1>₹<span id="rupee">0.00</span></h1><p><span id="coins">0</span> Coins</p><button onclick="showPage('storePage')">Redeem Gift Card</button></div>
+  <div class="card"><p>⏳ <b>Pending Coins:</b> <span id="pending">0</span> <br><small>Under Review</small></p></div>
+  <div class="card"><h4>🎁 Daily Login Bonus</h4><p>Claim +10 Coins every day</p><button id="dailyBtn" onclick="dailyBonus()">Claim</button><p id="dailyTimer" style="font-size:12px; color:#aaa;"></p></div>
 </div>
 
-<!-- 2. OFFERS PAGE -->
-<div class="page" id="offersPage">
-  <h2>Earn Coins</h2>
-  <div class="offer-card" style="background: linear-gradient(135deg, #00c6ff, #0072ff);">
-    <h3>CPX Research</h3>
-    <button onclick="completeTask('CPX Survey', 10)">Start +10 Coins</button>
-  </div>
-</div>
-
-<!-- 3. SURVEY PAGE -->
+<div class="page" id="offersPage"><h2>Earn Coins</h2><div class="offer-card" style="background: linear-gradient(135deg, #00c6ff, #0072ff);"><h3>CPX Research</h3><button onclick="completeTask('CPX Survey', 10)">Start +10 Coins</button></div></div>
 <div class="page" id="surveyPage"><h2>Survey Information</h2></div>
-
-<!-- 4. WALLET PAGE -->
-<div class="page" id="walletPage">
-  <h2>Wallet</h2>
-  <div class="balance-card">
-    <h1>₹<span id="rupee2">0.00</span></h1>
-    <p><span id="coins2">0</span> Coins</p>
-  </div>
-  <input id="upi" placeholder="UPI ID dalo">
-  <button onclick="withdraw()">Withdraw Request</button>
-  <button onclick="logout()" style="background:red;">Logout</button>
-</div>
-
-<!-- 5. HISTORY PAGE -->
+<div class="page" id="walletPage"><h2>Wallet</h2><div class="balance-card"><h1>₹<span id="rupee2">0.00</span></h1><p><span id="coins2">0</span> Coins</p></div><input id="upi" placeholder="UPI ID dalo"><button onclick="withdraw()">Withdraw Request</button><button onclick="logout()" style="background:red;">Logout</button></div>
 <div class="page" id="historyPage"><h2>Task History</h2><div id="historyList">Loading...</div></div>
+<div class="page" id="storePage"><h2>🎁 Redeem Store</h2><div class="gift-card"><div><h4>Google Play ₹10</h4><p>1000 Coins</p></div><button onclick="redeemGift('Google Play ₹10', 1000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Amazon ₹10</h4><p>1000 Coins</p></div><button onclick="redeemGift('Amazon ₹10', 1000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Google Play ₹50</h4><p>5000 Coins</p></div><button onclick="redeemGift('Google Play ₹50', 5000)" style="width:100px;">Redeem</button></div><div class="gift-card"><div><h4>Amazon ₹50</h4><p>5000 Coins</p></div><button onclick="redeemGift('Amazon ₹50', 5000)" style="width:100px;">Redeem</button></div></div>
+<div class="page" id="profilePage"><div class="balance-card"><h3 id="userEmail">User</h3><p><span id="coins3">0</span> Coins | <span id="refCount">0</span> Referrals</p></div><div class="card"><h3>Invite & Earn 250 Coins</h3><input id="refLink" readonly><button onclick="copyLink()">Copy Link</button></div></div>
 
-<!-- 6. STORE PAGE - GIFT CARD NAYA -->
-<div class="page" id="storePage">
-  <h2>🎁 Redeem Store</h2>
-  <div class="gift-card">
-    <div><h4>Google Play ₹10</h4><p>1000 Coins</p></div>
-    <button onclick="redeemGift('Google Play ₹10', 1000)" style="width:100px;">Redeem</button>
-  </div>
-  <div class="gift-card">
-    <div><h4>Amazon ₹10</h4><p>1000 Coins</p></div>
-    <button onclick="redeemGift('Amazon ₹10', 1000)" style="width:100px;">Redeem</button>
-  </div>
-  <div class="gift-card">
-    <div><h4>Google Play ₹50</h4><p>5000 Coins</p></div>
-    <button onclick="redeemGift('Google Play ₹50', 5000)" style="width:100px;">Redeem</button>
-  </div>
-  <div class="gift-card">
-    <div><h4>Amazon ₹50</h4><p>5000 Coins</p></div>
-    <button onclick="redeemGift('Amazon ₹50', 5000)" style="width:100px;">Redeem</button>
-  </div>
-</div>
-
-<!-- 7. PROFILE PAGE -->
-<div class="page" id="profilePage">
-  <div class="balance-card">
-    <h3 id="userEmail">User</h3>
-    <p><span id="coins3">0</span> Coins | <span id="refCount">0</span> Referrals</p>
-  </div>
-  <div class="card">
-    <h3>Invite & Earn 250 Coins</h3>
-    <input id="refLink" readonly>
-    <button onclick="copyLink()">Copy Link</button>
-  </div>
-</div>
-
-<!-- BOTTOM MENU -->
 <div class="bottom-nav">
   <div class="nav-item active" onclick="showPage('homePage')">Home</div>
   <div class="nav-item" onclick="showPage('offersPage')">Offers</div>
@@ -136,7 +66,16 @@
   import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = { /AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE/ };
+  // 🔥 SIRF IN 3 JAGAH APNA WALA DALO 🔥
+  const firebaseConfig = {
+    apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
+    authDomain: "earndost-90.firebaseapp.com",
+    projectId: "earndost-90",
+    storageBucket: "earndost-90.appspot.com",
+    messagingSenderId: "1019395758465",
+    appId: "1:1019395758465"
+  };
+
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -154,32 +93,11 @@
   }
   window.showPage = showPage;
 
-  // GOOGLE LOGIN
-  window.googleLogin = async function(){
-    try{ await signInWithPopup(auth, provider); }
-    catch(e){ alert(e.message) }
-  }
-
-  // SIGNUP / LOGIN / LOGOUT
-  window.signup = async function(){
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
-    if(!email ||!pass) return alert("Email Password dalo");
-    try{ await createUserWithEmailAndPassword(auth, email, pass); }
-    catch(e){ alert(e.message) }
-  }
-
-  window.login = async function(){
-    const email = document.getElementById("email").value;
-    const pass = document.getElementById("password").value;
-    if(!email ||!pass) return alert("Email Password dalo");
-    try{ await signInWithEmailAndPassword(auth, email, pass); }
-    catch(e){ alert(e.message) }
-  }
-
+  window.googleLogin = async function(){ try{ await signInWithPopup(auth, provider); } catch(e){ alert(e.message) } }
+  window.signup = async function(){ const email = document.getElementById("email").value; const pass = document.getElementById("password").value; if(!email ||!pass) return alert("Email Password dalo"); try{ await createUserWithEmailAndPassword(auth, email, pass); } catch(e){ alert(e.message) } }
+  window.login = async function(){ const email = document.getElementById("email").value; const pass = document.getElementById("password").value; if(!email ||!pass) return alert("Email Password dalo"); try{ await signInWithEmailAndPassword(auth, email, pass); } catch(e){ alert(e.message) } }
   window.logout = async function(){ await signOut(auth); }
 
-  // REFER CHECK
   const urlParams = new URLSearchParams(window.location.search);
   const refId = urlParams.get('ref');
 
@@ -203,9 +121,7 @@
       showPage('homePage');
       const userRef = doc(db,"users",user.uid);
       const snap = await getDoc(userRef);
-      if(!snap.exists()){
-        await setDoc(userRef, { coins: 0, pending: 0, referrals: 0, referredBy: null, lastDailyClaim: null });
-      }
+      if(!snap.exists()){ await setDoc(userRef, { coins: 0, pending: 0, referrals: 0, referredBy: null, lastDailyClaim: null }); }
       loadData(user.uid);
       checkDailyBonus();
       if(refId) checkReferral(refId, user.uid);
@@ -229,13 +145,7 @@
     document.getElementById("refLink").value = window.location.origin + "?ref=" + uid;
   }
 
-  async function addHistory(uid, task, coins){
-    await addDoc(collection(db, "transactions"), {
-      uid: uid, task: task, coins: coins,
-      rupee: (coins/COIN_RATE).toFixed(2),
-      date: serverTimestamp()
-    });
-  }
+  async function addHistory(uid, task, coins){ await addDoc(collection(db, "transactions"), { uid: uid, task: task, coins: coins, rupee: (coins/COIN_RATE).toFixed(2), date: serverTimestamp() }); }
 
   async function checkDailyBonus(){
     const snap = await getDoc(doc(db,"users",currentUser.uid));
@@ -246,62 +156,21 @@
       const lastDate = lastClaim.toDate();
       const now = new Date();
       const diffHours = (now - lastDate) / (1000 * 60 * 60);
-      if(diffHours < 24){
-        btn.disabled = true;
-        btn.innerText = "Claimed ✓";
-        let hoursLeft = 24 - Math.floor(diffHours);
-        timer.innerText = `Next claim in ${hoursLeft} hours`;
-      } else {
-        btn.disabled = false;
-        btn.innerText = "Claim +10 Coins";
-        timer.innerText = "";
-      }
+      if(diffHours < 24){ btn.disabled = true; btn.innerText = "Claimed ✓"; let hoursLeft = 24 - Math.floor(diffHours); timer.innerText = `Next claim in ${hoursLeft} hours`; }
+      else { btn.disabled = false; btn.innerText = "Claim +10 Coins"; timer.innerText = ""; }
     }
   }
 
-  window.dailyBonus = async function(){
-    await updateDoc(doc(db,"users",currentUser.uid), { coins: increment(10), lastDailyClaim: serverTimestamp() });
-    await addHistory(currentUser.uid, "Daily Login Bonus", 10);
-    alert("+10 Coins Claimed! 🎉");
-    loadData(currentUser.uid);
-    checkDailyBonus();
-  }
-
-  window.completeTask = async function(task, coins){
-    await updateDoc(doc(db,"users",currentUser.uid), {pending: increment(coins)});
-    await addHistory(currentUser.uid, task, coins);
-    alert(`${coins} Coins Pending me gaye!`);
-    loadData(currentUser.uid);
-  }
-
-  window.withdraw = async function(){
-    const upi = document.getElementById("upi").value;
-    if(!upi) return alert("UPI dalo");
-    await addDoc(collection(db, "withdrawals"), { uid: currentUser.uid, upi: upi, amount: document.getElementById("rupee2").innerText, status: "Pending", date: serverTimestamp() });
-    alert("Withdraw request bhej di gayi!");
-  }
-
-  // GIFT CARD REDEEM
-  window.redeemGift = async function(cardName, coinCost){
-    const userRef = doc(db,"users",currentUser.uid);
-    const snap = await getDoc(userRef);
-    const userCoins = snap.data().coins;
-    if(userCoins < coinCost) return alert("Coins kam hai!");
-    await updateDoc(userRef, { coins: increment(-coinCost) });
-    await addDoc(collection(db, "redeems"), { uid: currentUser.uid, item: cardName, coins: coinCost, status: "Processing", date: serverTimestamp() });
-    await addHistory(currentUser.uid, "Redeemed: " + cardName, -coinCost);
-    alert(`${cardName} ke liye request bhej di gayi! 24 ghante me code mil jayega.`);
-    loadData(currentUser.uid);
-  }
+  window.dailyBonus = async function(){ await updateDoc(doc(db,"users",currentUser.uid), { coins: increment(10), lastDailyClaim: serverTimestamp() }); await addHistory(currentUser.uid, "Daily Login Bonus", 10); alert("+10 Coins Claimed! 🎉"); loadData(currentUser.uid); checkDailyBonus(); }
+  window.completeTask = async function(task, coins){ await updateDoc(doc(db,"users",currentUser.uid), {pending: increment(coins)}); await addHistory(currentUser.uid, task, coins); alert(`${coins} Coins Pending me gaye!`); loadData(currentUser.uid); }
+  window.withdraw = async function(){ const upi = document.getElementById("upi").value; if(!upi) return alert("UPI dalo"); await addDoc(collection(db, "withdrawals"), { uid: currentUser.uid, upi: upi, amount: document.getElementById("rupee2").innerText, status: "Pending", date: serverTimestamp() }); alert("Withdraw request bhej di gayi!"); }
+  window.redeemGift = async function(cardName, coinCost){ const userRef = doc(db,"users",currentUser.uid); const snap = await getDoc(userRef); const userCoins = snap.data().coins; if(userCoins < coinCost) return alert("Coins kam hai!"); await updateDoc(userRef, { coins: increment(-coinCost) }); await addDoc(collection(db, "redeems"), { uid: currentUser.uid, item: cardName, coins: coinCost, status: "Processing", date: serverTimestamp() }); await addHistory(currentUser.uid, "Redeemed: " + cardName, -coinCost); alert(`${cardName} ke liye request bhej di gayi! 24 ghante me code mil jayega.`); loadData(currentUser.uid); }
 
   async function loadHistory(){
     const q = query(collection(db, "transactions"), where("uid", "==", currentUser.uid));
     const snap = await getDocs(q);
     let html = "";
-    snap.forEach(doc=>{
-      const d = doc.data();
-      html += `<div class="history-item"><span>${d.task}</span><span>${d.coins>0?'+':''}${d.coins} Coins</span></div>`;
-    });
+    snap.forEach(doc=>{ const d = doc.data(); html += `<div class="history-item"><span>${d.task}</span><span>${d.coins>0?'+':''}${d.coins} Coins</span></div>`; });
     document.getElementById("historyList").innerHTML = html || "No history yet";
   }
 
