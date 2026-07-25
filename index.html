@@ -32,6 +32,26 @@
   </style>
 </head>
 <body>
+  <div style="text-align:center; margin:30px 0;">
+  <h2>🎁 Earn Coins</h2>
+  <p>Complete Surveys & Offers</p>
+  
+  <button onclick="openCPX()" style="padding:15px 30px; background:#ff5722; color:white; border:none; border-radius:12px; font-size:18px; font-weight:bold; cursor:pointer;">
+    Start Earning Now
+  </button>
+</div>
+
+<script>
+function openCPX() {
+  let userId = localStorage.getItem("userId") || "guest123"; 
+  let userName = localStorage.getItem("userName") || "User";
+  let userEmail = localStorage.getItem("userEmail") || "user@email.com";
+  
+  let cpxUrl = `https://offers.cpx-research.com/index.php?app_id=34757&ext_user_id=${userId}&secure_hash={secure_hash}&username=${userName}&email=${userEmail}&subid_1=&subid_2`;
+  
+  window.open(cpxUrl, "_blank");
+}
+</script>
   <div class="container">
     <div class="header">
       <h1>💰 Earn Money</h1>
