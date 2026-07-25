@@ -136,18 +136,29 @@
       showPage('homePage');
       const userRef = doc(db,"users",user.uid);
       const snap = await getDoc(userRef);
-      if(!snap.exists()){ 
-  await setDoc(userRef, { 
-    name: user.displayName || user.email.split('@')[0], 
+      if(!snap.exists()){
+  await setDoc(userRef, {
+    name: user.displayName || user.email.split('@')[0],
     email: user.email,
     coins: 0, 
     pending: 0, 
     referrals: 0, 
-    referredBy: null, 
-    lastDailyClaim 
-  }); 
+    referredBy: null,
+    lastDailyClaim
+  });
+} else {
+  // PURANE USER KE LIYE YE ADD KARO
+  await updateDoc(userRef, {
+    name: snap.data().name || user.displayName || user.email.split('@')[0],
+    email: user.email
+  });
       }
       loadData(user.uid);
+
+// YE 1 LINE ADD KARO
+document.getElementById('userName').innerText = snap.data()?.name || user.displayName || user.email.split('@')[0];
+
+checkDailyBonus();
       checkDailyBonus();
       if(refId) checkReferral(refId, user.uid);
     } else {
