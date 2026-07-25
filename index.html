@@ -5,26 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { background: #0a0e1a; color: white; font-family: Arial; margin: 0; padding-bottom: 80px; }
-.page { display: none; padding: 20px; }
-.active { display: block; }
-.balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
-.card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
+ .page { display: none; padding: 20px; }
+ .active { display: block; }
+ .balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
+ .card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
+ .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+ .stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
     button { background: #0072ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; }
     button:disabled { background: #444; cursor: not-allowed; }
     input { width: 90%; padding: 10px; border-radius: 8px; border: none; background: #2a3042; color: white; }
-.bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
-.nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
-.nav-item.active { color: #00c6ff; }
-.history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
-.offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
-.gift-card { display:flex; justify-content:space-between; align-items:center; background:#2a3042; padding:15px; border-radius:12px; margin:10px 0; }
+ .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; }
+ .nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
+ .nav-item.active { color: #00c6ff; }
+ .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
+ .offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
+ .gift-card { display:flex; justify-content:space-between; align-items:center; background:#2a3042; padding:15px; border-radius:12px; margin:10px 0; }
+ .google-btn { background: white; color: black; display:flex; align-items:center; justify-content:center; gap:10px; }
   </style>
 </head>
 <body>
 
-<!-- 0. LOGIN PAGE -->
+<!-- 0. LOGIN PAGE - NAYA -->
 <div class="page active" id="loginPage">
   <div class="card">
     <h2>🚀 EarnDost Login</h2>
@@ -32,6 +33,10 @@
     <input id="password" type="password" placeholder="Password">
     <button onclick="signup()">Sign Up</button>
     <button onclick="login()" style="background:#555;">Login</button>
+    <p style="text-align:center; color:#aaa;">ya</p>
+    <button class="google-btn" onclick="googleLogin()">
+      <img src="https://www.google.com/favicon.ico" width="18"> Google se Login
+    </button>
   </div>
 </div>
 
@@ -82,35 +87,23 @@
 <!-- 5. HISTORY PAGE -->
 <div class="page" id="historyPage"><h2>Task History</h2><div id="historyList">Loading...</div></div>
 
-<!-- 6. STORE PAGE - NAYA GIFT CARD -->
+<!-- 6. STORE PAGE - GIFT CARD NAYA -->
 <div class="page" id="storePage">
   <h2>🎁 Redeem Store</h2>
   <div class="gift-card">
-    <div>
-      <h4>Google Play ₹10</h4>
-      <p>1000 Coins</p>
-    </div>
+    <div><h4>Google Play ₹10</h4><p>1000 Coins</p></div>
     <button onclick="redeemGift('Google Play ₹10', 1000)" style="width:100px;">Redeem</button>
   </div>
   <div class="gift-card">
-    <div>
-      <h4>Amazon ₹10</h4>
-      <p>1000 Coins</p>
-    </div>
+    <div><h4>Amazon ₹10</h4><p>1000 Coins</p></div>
     <button onclick="redeemGift('Amazon ₹10', 1000)" style="width:100px;">Redeem</button>
   </div>
   <div class="gift-card">
-    <div>
-      <h4>Google Play ₹50</h4>
-      <p>5000 Coins</p>
-    </div>
+    <div><h4>Google Play ₹50</h4><p>5000 Coins</p></div>
     <button onclick="redeemGift('Google Play ₹50', 5000)" style="width:100px;">Redeem</button>
   </div>
   <div class="gift-card">
-    <div>
-      <h4>Amazon ₹50</h4>
-      <p>5000 Coins</p>
-    </div>
+    <div><h4>Amazon ₹50</h4><p>5000 Coins</p></div>
     <button onclick="redeemGift('Amazon ₹50', 5000)" style="width:100px;">Redeem</button>
   </div>
 </div>
@@ -140,16 +133,17 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = { /AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE/ };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
+  const provider = new GoogleAuthProvider();
 
   let currentUser;
-  const COIN_RATE = 100; // 100 coins = 1 Rs
+  const COIN_RATE = 100;
 
   function showPage(id){
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -159,6 +153,12 @@
     if(id == 'historyPage') loadHistory();
   }
   window.showPage = showPage;
+
+  // GOOGLE LOGIN
+  window.googleLogin = async function(){
+    try{ await signInWithPopup(auth, provider); }
+    catch(e){ alert(e.message) }
+  }
 
   // SIGNUP / LOGIN / LOGOUT
   window.signup = async function(){
@@ -177,9 +177,7 @@
     catch(e){ alert(e.message) }
   }
 
-  window.logout = async function(){
-    await signOut(auth);
-  }
+  window.logout = async function(){ await signOut(auth); }
 
   // REFER CHECK
   const urlParams = new URLSearchParams(window.location.search);
@@ -227,7 +225,7 @@
     document.getElementById("rupee2").innerText = (data.coins/COIN_RATE).toFixed(2);
     document.getElementById("pending").innerText = data.pending || 0;
     document.getElementById("refCount").innerText = data.referrals || 0;
-    document.getElementById("userEmail").innerText = currentUser.email.split("@")[0];
+    document.getElementById("userEmail").innerText = currentUser.displayName || currentUser.email.split("@")[0];
     document.getElementById("refLink").value = window.location.origin + "?ref=" + uid;
   }
 
@@ -283,22 +281,14 @@
     alert("Withdraw request bhej di gayi!");
   }
 
-  // GIFT CARD REDEEM - NAYA
+  // GIFT CARD REDEEM
   window.redeemGift = async function(cardName, coinCost){
     const userRef = doc(db,"users",currentUser.uid);
     const snap = await getDoc(userRef);
     const userCoins = snap.data().coins;
-
     if(userCoins < coinCost) return alert("Coins kam hai!");
-
     await updateDoc(userRef, { coins: increment(-coinCost) });
-    await addDoc(collection(db, "redeems"), {
-      uid: currentUser.uid,
-      item: cardName,
-      coins: coinCost,
-      status: "Processing",
-      date: serverTimestamp()
-    });
+    await addDoc(collection(db, "redeems"), { uid: currentUser.uid, item: cardName, coins: coinCost, status: "Processing", date: serverTimestamp() });
     await addHistory(currentUser.uid, "Redeemed: " + cardName, -coinCost);
     alert(`${cardName} ke liye request bhej di gayi! 24 ghante me code mil jayega.`);
     loadData(currentUser.uid);
@@ -319,4 +309,4 @@
 
 </script>
 </body>
-  </html>
+</html>
