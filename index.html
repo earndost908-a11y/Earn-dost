@@ -5,21 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { background: #0a0e1a; color: white; font-family: Arial; margin: 0; padding-bottom: 80px; }
- .page { display: none; padding: 20px; }
- .active { display: block; }
- .balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
- .card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
- .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
- .stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
+.page { display: none; padding: 20px; }
+.active { display: block; }
+.balance-card { background: linear-gradient(135deg, #00c6ff, #0072ff); padding: 25px; border-radius: 20px; text-align: center; }
+.card { background: #1a1f2e; padding: 15px; border-radius: 12px; margin: 10px 0; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat-box { background: #1a1f2e; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #2a3042; }
     button { background: #0072ff; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; font-weight: bold; cursor: pointer; }
     button:disabled { background: #444; cursor: not-allowed; }
     input { width: 90%; padding: 10px; border-radius: 8px; border: none; background: #2a3042; color: white; }
- .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2a3042; }
- .nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
- .nav-item.active { color: #00c6ff; }
- .nav-icon { font-size: 22px; display: block; margin-bottom: 3px; }
- .history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
- .offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
+.bottom-nav { position: fixed; bottom: 0; width: 100%; background: #1a1f2e; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2a3042; }
+.nav-item { text-align: center; font-size: 11px; color: #888; cursor: pointer; }
+.nav-item.active { color: #00c6ff; }
+.nav-icon { font-size: 22px; display: block; margin-bottom: 3px; }
+.history-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #2a3042; }
+.offer-card { padding: 20px; border-radius: 15px; margin: 10px 0; }
   </style>
 </head>
 <body>
@@ -31,7 +31,7 @@
     <p>Current Balance</p>
     <h1>₹<span id="rupee">0.00</span></h1>
     <p><span id="coins">0</span> Coins</p>
-    <button onclick="showPage('walletPage')">Withdraw</button>
+    <button onclick="showPage('walletPage', event)">Withdraw</button>
   </div>
   <div class="card">
     <p>⏳ <b>Pending Coins:</b> <span id="pending">0</span> <br><small>Under Review</small></p>
@@ -92,24 +92,24 @@
   </div>
 </div>
 
-<!-- BOTTOM MENU WITH ICONS -->
+<!-- BOTTOM MENU WITH ICONS - FIXED -->
 <div class="bottom-nav">
-  <div class="nav-item active" onclick="showPage('homePage')">
+  <div class="nav-item active" onclick="showPage('homePage', event)">
     <span class="nav-icon">🏠</span>Home
   </div>
-  <div class="nav-item" onclick="showPage('offersPage')">
+  <div class="nav-item" onclick="showPage('offersPage', event)">
     <span class="nav-icon">💰</span>Offers
   </div>
-  <div class="nav-item" onclick="showPage('surveyPage')">
+  <div class="nav-item" onclick="showPage('surveyPage', event)">
     <span class="nav-icon">📊</span>Survey
   </div>
-  <div class="nav-item" onclick="showPage('walletPage')">
+  <div class="nav-item" onclick="showPage('walletPage', event)">
     <span class="nav-icon">💳</span>Wallet
   </div>
-  <div class="nav-item" onclick="showPage('historyPage')">
+  <div class="nav-item" onclick="showPage('historyPage', event)">
     <span class="nav-icon">📜</span>History
   </div>
-  <div class="nav-item" onclick="showPage('profilePage')">
+  <div class="nav-item" onclick="showPage('profilePage', event)">
     <span class="nav-icon">👤</span>Profile
   </div>
 </div>
@@ -119,7 +119,14 @@
   import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = { / AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE/ };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
+    authDomain: "apna-project.firebaseapp.com",
+    projectId: "apna-project",
+    storageBucket: "apna-project.appspot.com",
+    messagingSenderId: "123456789",
+    appId: "1:123456789:web:abcdefg"
+  };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
@@ -243,4 +250,4 @@
 
 </script>
 </body>
-  </html>
+</html>
