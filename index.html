@@ -220,14 +220,6 @@ onAuthStateChanged(auth, (user) => {
     window.location.href = "login.html"
   }
 });                               
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    document.getElementById('user-name').innerText = user.displayName || user.email;
-  } else {
-    window.location.href = "login.html"
-  }
-});
-
 </script>
 </body>
 </html>
