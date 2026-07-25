@@ -136,7 +136,7 @@
       showPage('homePage');
       const userRef = doc(db,"users",user.uid);
       const snap = await getDoc(userRef);
-      if(!snap.exists()){ await setDoc(userRef, { coins: 0, pending: 0, referrals: 0, referredBy: null, lastDailyClaim: null }); }
+      if(!snap.exists()){ await setDoc(userRef, { coins: 0, pending: 0, referrals: 0, referredBy: null, lastDailyClaim }); }
       loadData(user.uid);
       checkDailyBonus();
       if(refId) checkReferral(refId, user.uid);
