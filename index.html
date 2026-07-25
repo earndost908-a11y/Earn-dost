@@ -25,71 +25,15 @@
 
 <div id="loader">Loading...</div>
 
-<!-- HOME -->
-<div id="home" class="page">
-  <h2>Welcome <span id="home-name">User</span></h2>
-  <div class="card"><h2 id="home-coins">0 Coins</h2><p>Earn more by completing offers</p></div>
-  <div class="box"><h3>Daily Check-in</h3><button class="btn" onclick="alert('Coming Soon')">Claim 10 Coins</button></div>
-</div>
-
-<!-- OFFERS -->
+<div id="home" class="page"><h2>Welcome <span id="home-name">Loading...</span></h2><div class="card"><h2 id="home-coins">0 Coins</h2></div></div>
 <div id="offers" class="page"><h2>Offers</h2><div class="box"><p>App Install - 50 Coins</p><button class="btn">Start</button></div></div>
-
-<!-- STORE -->
 <div id="store" class="page"><h2>Store</h2><div class="box"><p>Redeem Gift Cards</p><button class="btn">View</button></div></div>
-
-<!-- WALLET -->
-<div id="wallet" class="page">
-  <h2>Wallet</h2>
-  <div class="card"><h2 id="wallet-coins">0 Coins</h2><p>Available Balance</p></div>
-  <button class="btn" onclick="showPage('withdrawal')">Withdraw</button>
-</div>
-
-<!-- WITHDRAWAL -->
-<div id="withdrawal" class="page">
-  <h2>Withdraw</h2>
-  <div class="box">
-    <input type="text" id="upi" placeholder="UPI ID">
-    <input type="number" id="amount" placeholder="Min 500 Coins">
-    <button class="btn" onclick="alert('Request Sent')">Request Withdrawal</button>
-  </div>
-</div>
-
-<!-- HISTORY -->
+<div id="wallet" class="page"><h2>Wallet</h2><div class="card"><h2 id="wallet-coins">0 Coins</h2></div><button class="btn" onclick="showPage('withdrawal')">Withdraw</button></div>
+<div id="withdrawal" class="page"><h2>Withdraw</h2><div class="box"><input type="text" id="upi" placeholder="UPI ID"><input type="number" id="amount" placeholder="Min 500 Coins"><button class="btn" onclick="alert('Request Sent')">Request Withdrawal</button></div></div>
 <div id="history" class="page"><h2>History</h2><div class="box"><p>No transactions yet</p></div></div>
-
-<!-- REFER -->
-<div id="refer" class="page">
-  <h2>Invite & Earn 250 Coins</h2>
-  <div class="box">
-    <input type="text" id="referral-link" readonly>
-    <button class="btn" onclick="copyLink()">Copy Link</button>
-  </div>
-  <p>Total Referrals: <span id="refer-count">0</span></p>
-</div>
-
-<!-- PROFILE -->
-<div id="profile" class="page">
-  <div class="card">
-    <h2 id="profile-name">User</h2>
-    <p id="profile-stats">0 Coins | 0 Referrals</p>
-  </div>
-  <div class="box">
-    <p>Email: <span id="profile-email"></span></p>
-    <button class="btn" onclick="logout()">Logout</button>
-  </div>
-</div>
-
-<!-- LOGIN -->
-<div id="login" class="page">
-  <h2>Login</h2>
-  <div class="box">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button class="btn" onclick="login()">Login with Email</button>
-    <button class="btn btn-google" onclick="googleLogin()">1 Click - Login with Google</button>
-  </div>
-</nav>
+<div id="refer" class="page"><h2>Invite & Earn 250 Coins</h2><div class="box"><input type="text" id="referral-link" readonly><button class="btn" onclick="copyLink()">Copy Link</button></div><p>Total Referrals: <span id="refer-count">0</span></p></div>
+<div id="profile" class="page"><div class="card"><h2 id="profile-name">Loading...</h2><p id="profile-stats">0 Coins | 0 Referrals</p></div><div class="box"><p>Email: <span id="profile-email"></span></p><button class="btn" onclick="logout()">Logout</button></div></div>
+<div id="login" class="page"><h2>Login</h2><div class="box"><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button class="btn" onclick="login()">Login with Email</button><button class="btn btn-google" onclick="googleLogin()">1 Click - Login with Google</button></div></div>
 
 <nav id="navbar" style="display:none">
   <a href="#" onclick="showPage('home')">Home</a>
@@ -112,15 +56,13 @@
     projectId: "earn-dost-d8c85",
     storageBucket: "earn-dost-d8c85.firebasestorage.app",
     messagingSenderId: "1019395758465",
-    appId: "1:1019395758465:web:5298eede37878a87e17080",
-    measurementId: "G-MLNM7D7BZQ"
+    appId: "1:1019395758465:web:5298eede37878a87e17080"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth();
   const db = getFirestore();
-  const provider = new GoogleAuthProvider(); // GOOGLE KE LIYE
-  let currentUserData = {};
+  const provider = new GoogleAuthProvider();
 
   window.showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -129,32 +71,42 @@
     document.querySelector(`nav a[onclick="showPage('${pageId}')"]`)?.classList.add('active');
   }
 
+  // YE PURA FUNCTION BADAL DIYA - AB NAME PAKKA AAYEGA
   onAuthStateChanged(auth, async (user) => {
     document.getElementById('loader').style.display = 'none';
     if (user) {
       document.getElementById('navbar').style.display = 'flex';
       const userRef = doc(db, "users", user.uid);
+      let userName = user.displayName || user.email.split('@')[0]; // PEHLE HI NAAM BANA LO
       const snap = await getDoc(userRef);
 
       if(!snap.exists()){
-        currentUserData = {
-          name: user.displayName || user.email.split('@')[0], 
-          email: user.email, photo: user.photoURL || "",
-          coins: 0, pending: 0, referrals: 0, referredBy: null, 
-          lastDailyClaim: 0, createdAt: new Date()
+        // NAYA USER - TURANT SAVE KARO
+        let newUserData = {
+          name: userName, email: user.email, photo: user.photoURL || "",
+          coins: 0, pending: 0, referrals: 0, referredBy: null, createdAt: new Date()
         };
-        await setDoc(userRef, currentUserData);
+        await setDoc(userRef, newUserData);
       } else {
-        currentUserData = snap.data();
+        // PURANA USER - AGAR NAAM KHALI HAI TO UPDATE KARO
+        let oldData = snap.data();
+        if(!oldData.name){
+          await updateDoc(userRef, { name: userName });
+        } else {
+          userName = oldData.name; // FIRESTORE WALA NAAM USE KARO
+        }
       }
 
-      document.getElementById('profile-name').innerText = currentUserData.name;
-      document.getElementById('home-name').innerText = currentUserData.name;
-      document.getElementById('profile-email').innerText = currentUserData.email;
-      document.getElementById('profile-stats').innerText = `${currentUserData.coins} Coins | ${currentUserData.referrals} Referrals`;
-      document.getElementById('home-coins').innerText = `${currentUserData.coins} Coins`;
-      document.getElementById('wallet-coins').innerText = `${currentUserData.coins} Coins`;
-      document.getElementById('refer-count').innerText = currentUserData.referrals;
+      // SCREEN PE TURANT NAAM DAAL DO
+      document.getElementById('profile-name').innerText = userName;
+      document.getElementById('home-name').innerText = userName;
+      document.getElementById('profile-email').innerText = user.email;
+      
+      let finalData = snap.exists() ? snap.data() : {coins:0, referrals:0};
+      document.getElementById('profile-stats').innerText = `${finalData.coins || 0} Coins | ${finalData.referrals || 0} Referrals`;
+      document.getElementById('home-coins').innerText = `${finalData.coins || 0} Coins`;
+      document.getElementById('wallet-coins').innerText = `${finalData.coins || 0} Coins`;
+      document.getElementById('refer-count').innerText = finalData.referrals || 0;
       document.getElementById('referral-link').value = `https://earndost.netlify.app/?ref=${user.uid}`;
       
       showPage('home');
@@ -165,7 +117,6 @@
     }
   });
 
-  // EMAIL LOGIN
   window.login = async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -173,19 +124,13 @@
     catch(e){ alert(e.message); }
   }
   
-  // 1 CLICK GOOGLE LOGIN
   window.googleLogin = async () => {
     try{ await signInWithPopup(auth, provider); }
     catch(e){ alert(e.message); }
   }
 
   window.logout = async () => { await signOut(auth); }
-
-  window.copyLink = () => {
-    document.getElementById('referral-link').select();
-    document.execCommand('copy');
-    alert("Link Copied!");
-  }
+  window.copyLink = () => { document.getElementById('referral-link').select(); document.execCommand('copy'); alert("Link Copied!"); }
 
 </script>
 </body>
