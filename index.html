@@ -135,17 +135,8 @@
       document.getElementById('loginPage').style.display = 'none';
       showPage('homePage');
       const userRef = doc(db,"users",user.uid);
-      const snap = await getDoc(userRef);
-      if(!snap.exists()){
-  await setDoc(userRef, {
-    name: user.displayName || user.email.split('@')[0],
-    email: user.email,
-    coins: 0, 
-    pending: 0, 
-    referrals: 0, 
-    referredBy: null,
-    lastDailyClaim
-  });
+import { getDoc, setDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 } else {
   // PURANE USER KE LIYE YE ADD KARO
   await updateDoc(userRef, {
