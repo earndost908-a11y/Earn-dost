@@ -163,7 +163,7 @@
   async function addHistory(uid, task, coins){ await addDoc(collection(db, "transactions"), { uid: uid, task: task, coins: coins, rupee: (coins/COIN_RATE).toFixed(2), date: serverTimestamp() }); }
 
   async function checkDailyBonus(){
-    const snap = await getDoc(doc(db,"users",currentUser.uid));
+    const snap = await getDoc(doc(db,"Welcome <span id="user-name">User</span>",currentUser.uid));
     const lastClaim = snap.data().lastDailyClaim;
     const btn = document.getElementById("dailyBtn");
     const timer = document.getElementById("dailyTimer");
@@ -190,6 +190,16 @@
   }
 
   window.copyLink = function(){ navigator.clipboard.writeText(document.getElementById("refLink").value); alert("Copied!"); }
+    window.copyLink = function(){ navigator
+
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    document.getElementById('user-name').innerText = user.displayName || user.email;
+  } else {
+    window.location.href = "login.html"
+  }
+});
 
 </script>
 </body>
