@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>EarnDost</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
  body{background:#0a0a0a;color:#fff;font-family:sans-serif;margin:0;padding-bottom:70px}
  .page{display:none;padding:15px}
@@ -15,34 +16,102 @@
  .box input{width:100%;padding:10px;background:#2a2a2a;border:none;color:#fff;border-radius:8px;margin:10px 0;box-sizing:border-box}
  .btn{width:100%;padding:12px;background:#0072ff;border:none;color:#fff;font-weight:bold;border-radius:8px;cursor:pointer;margin-top:8px}
  .btn-google{background:#db4437}
- nav{position:fixed;bottom:0;width:100%;background:#111;display:flex;justify-content:space-around;padding:8px 0;z-index:99}
- nav a{color:#888;text-decoration:none;font-size:11px;text-align:center}
+ .btn-small{padding:10px;font-size:13px}
+ nav{position:fixed;bottom:0;width:100%;background:#111;display:flex;justify-content:space-around;padding:8px 0;z-index:99;border-top:1px solid #222}
+ nav a{color:#888;text-decoration:none;font-size:10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
  nav a.active{color:#00c6ff}
+ nav i{font-size:18px}
  #loader{position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0a;display:flex;justify-content:center;align-items:center;z-index:999}
+ .stat-row{display:flex;justify-content:space-between;margin:8px 0}
+ .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 </style>
 </head>
 <body>
 
 <div id="loader">Loading...</div>
 
-<div id="home" class="page"><h2>Welcome <span id="home-name">Loading...</span></h2><div class="card"><h2 id="home-coins">0 Coins</h2></div></div>
+<!-- 1. HOME -->
+<div id="home" class="page"><h2>Welcome <span id="home-name">Loading...</span></h2><div class="card"><h2 id="home-coins">0 Coins</h2><p>Earn more by completing offers</p></div><div class="box"><h3>Daily Check-in</h3><button class="btn" onclick="alert('Coming Soon')">Claim 10 Coins</button></div></div>
+
+<!-- 2. OFFERS -->
 <div id="offers" class="page"><h2>Offers</h2><div class="box"><p>App Install - 50 Coins</p><button class="btn">Start</button></div></div>
-<div id="store" class="page"><h2>Store</h2><div class="box"><p>Redeem Gift Cards</p><button class="btn">View</button></div></div>
-<div id="wallet" class="page"><h2>Wallet</h2><div class="card"><h2 id="wallet-coins">0 Coins</h2></div><button class="btn" onclick="showPage('withdrawal')">Withdraw</button></div>
-<div id="withdrawal" class="page"><h2>Withdraw</h2><div class="box"><input type="text" id="upi" placeholder="UPI ID"><input type="number" id="amount" placeholder="Min 500 Coins"><button class="btn" onclick="alert('Request Sent')">Request Withdrawal</button></div></div>
+
+<!-- 3. STORE -->
+<div id="store" class="page">
+  <h2>Store</h2>
+  <p style="font-size:12px;color:#aaa">1 Rupee = 10 Coins</p>
+  <div class="box">
+    <h3><i class="fa-brands fa-amazon"></i> Amazon Gift Card</h3>
+    <div class="grid-2">
+      <button class="btn btn-small" onclick="redeemCard('Amazon', 100, 10)">10 ₹ - 100 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('Amazon', 200, 20)">20 ₹ - 200 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('Amazon', 500, 50)">50 ₹ - 500 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('Amazon', 1000, 100)">100 ₹ - 1000 Coins</button>
+    </div>
+  </div>
+  <div class="box">
+    <h3><i class="fa-brands fa-google-play"></i> Google Play Redeem Code</h3>
+    <div class="grid-2">
+      <button class="btn btn-small" onclick="redeemCard('PlayStore', 100, 10)">10 ₹ - 100 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('PlayStore', 200, 20)">20 ₹ - 200 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('PlayStore', 500, 50)">50 ₹ - 500 Coins</button>
+      <button class="btn btn-small" onclick="redeemCard('PlayStore', 1000, 100)">100 ₹ - 1000 Coins</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. WALLET -->
+<div id="wallet" class="page">
+  <h2>Wallet</h2>
+  <div class="card"><h2 id="wallet-coins">0 Coins</h2><p>Available Balance</p></div>
+  <div class="box">
+    <div class="stat-row"><span>Available:</span><span id="wallet-available">0</span></div>
+    <div class="stat-row"><span>Pending:</span><span id="wallet-pending">0</span></div>
+  </div>
+  <button class="btn" onclick="showPage('withdrawal')">Withdraw</button>
+</div>
+
+<!-- 5. WITHDRAWAL -->
+<div id="withdrawal" class="page">
+  <h2>Withdraw</h2>
+  <div class="box">
+    <p><b>Balance: <span id="withdraw-balance">0</span> Coins</b></p>
+    <p style="font-size:12px;color:#aaa">1 Rupee = 10 Coins</p>
+    <input type="text" id="upi" placeholder="Enter UPI ID">
+    <p style="margin-top:15px">Quick Withdraw:</p>
+    <div class="grid-2">
+      <button class="btn btn-small" onclick="withdraw(20)">2 ₹ - 20 Coins</button>
+      <button class="btn btn-small" onclick="withdraw(50)">5 ₹ - 50 Coins</button>
+      <button class="btn btn-small" onclick="withdraw(100)">10 ₹ - 100 Coins</button>
+      <button class="btn btn-small" onclick="withdraw(200)">20 ₹ - 200 Coins</button>
+    </div>
+    <hr style="margin:15px 0;border-color:#333">
+    <input type="number" id="custom-amount" placeholder="Custom Amount in Coins">
+    <button class="btn" onclick="customWithdraw()">Withdraw</button>
+  </div>
+</div>
+
+<!-- 6. HISTORY -->
 <div id="history" class="page"><h2>History</h2><div class="box"><p>No transactions yet</p></div></div>
+
+<!-- 7. REFER -->
 <div id="refer" class="page"><h2>Invite & Earn 250 Coins</h2><div class="box"><input type="text" id="referral-link" readonly><button class="btn" onclick="copyLink()">Copy Link</button></div><p>Total Referrals: <span id="refer-count">0</span></p></div>
+
+<!-- 8. PROFILE -->
 <div id="profile" class="page"><div class="card"><h2 id="profile-name">Loading...</h2><p id="profile-stats">0 Coins | 0 Referrals</p></div><div class="box"><p>Email: <span id="profile-email"></span></p><button class="btn" onclick="logout()">Logout</button></div></div>
+
+<!-- 9. LOGIN -->
 <div id="login" class="page"><h2>Login</h2><div class="box"><input type="email" id="email" placeholder="Email"><input type="password" id="password" placeholder="Password"><button class="btn" onclick="login()">Login with Email</button><button class="btn btn-google" onclick="googleLogin()">1 Click - Login with Google</button></div></div>
 
+<!-- ICON NAVBAR -->
 <nav id="navbar" style="display:none">
-  <a href="#" onclick="showPage('home')">Home</a>
-  <a href="#" onclick="showPage('offers')">Offers</a>
-  <a href="#" onclick="showPage('store')">Store</a>
-  <a href="#" onclick="showPage('wallet')">Wallet</a>
-  <a href="#" onclick="showPage('history')">History</a>
-  <a href="#" onclick="showPage('refer')">Refer</a>
-  <a href="#" onclick="showPage('profile')">Profile</a>
+  <a href="#" onclick="showPage('home')"><i class="fa fa-home"></i>Home</a>
+  <a href="#" onclick="showPage('offers')"><i class="fa fa-gift"></i>Offers</a>
+  <a href="#" onclick="showPage('store')"><i class="fa fa-store"></i>Store</a>
+  <a href="#" onclick="showPage('wallet')"><i class="fa fa-wallet"></i>Wallet</a>
+  <a href="#" onclick="showPage('history')"><i class="fa fa-clock-rotate-left"></i>History</a>
+  <a href="#" onclick="showPage('refer')"><i class="fa fa-user-plus"></i>Refer</a>
+  <a href="#" onclick="showPage('profile')"><i class="fa fa-user"></i>Profile</a>
 </nav>
 
 <script type="module">
@@ -50,19 +119,22 @@
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+  // TUMHARA FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
     authDomain: "earn-dost-d8c85.firebaseapp.com",
     projectId: "earn-dost-d8c85",
     storageBucket: "earn-dost-d8c85.firebasestorage.app",
     messagingSenderId: "1019395758465",
-    appId: "1:1019395758465:web:5298eede37878a87e17080"
+    appId: "1:1019395758465:web:5298eede37878a87e17080",
+    measurementId: "G-MLNM7D7BZQ"
   };
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth();
   const db = getFirestore();
   const provider = new GoogleAuthProvider();
+  let currentUserData = {};
 
   window.showPage = (pageId) => {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -71,66 +143,69 @@
     document.querySelector(`nav a[onclick="showPage('${pageId}')"]`)?.classList.add('active');
   }
 
-  // YE PURA FUNCTION BADAL DIYA - AB NAME PAKKA AAYEGA
   onAuthStateChanged(auth, async (user) => {
     document.getElementById('loader').style.display = 'none';
     if (user) {
       document.getElementById('navbar').style.display = 'flex';
       const userRef = doc(db, "users", user.uid);
-      let userName = user.displayName || user.email.split('@')[0]; // PEHLE HI NAAM BANA LO
+      let userName = user.displayName || user.email.split('@')[0];
       const snap = await getDoc(userRef);
 
       if(!snap.exists()){
-        // NAYA USER - TURANT SAVE KARO
-        let newUserData = {
-          name: userName, email: user.email, photo: user.photoURL || "",
-          coins: 0, pending: 0, referrals: 0, referredBy: null, createdAt: new Date()
-        };
-        await setDoc(userRef, newUserData);
+        currentUserData = {name: userName, email: user.email, photo: user.photoURL || "", coins: 0, pending: 0, referrals: 0, referredBy: null, createdAt: new Date()};
+        await setDoc(userRef, currentUserData);
       } else {
-        // PURANA USER - AGAR NAAM KHALI HAI TO UPDATE KARO
-        let oldData = snap.data();
-        if(!oldData.name){
-          await updateDoc(userRef, { name: userName });
-        } else {
-          userName = oldData.name; // FIRESTORE WALA NAAM USE KARO
-        }
+        currentUserData = snap.data();
+        if(!currentUserData.name){ await updateDoc(userRef, { name: userName }); currentUserData.name = userName; }
       }
 
-      // SCREEN PE TURANT NAAM DAAL DO
-      document.getElementById('profile-name').innerText = userName;
-      document.getElementById('home-name').innerText = userName;
-      document.getElementById('profile-email').innerText = user.email;
-      
-      let finalData = snap.exists() ? snap.data() : {coins:0, referrals:0};
-      document.getElementById('profile-stats').innerText = `${finalData.coins || 0} Coins | ${finalData.referrals || 0} Referrals`;
-      document.getElementById('home-coins').innerText = `${finalData.coins || 0} Coins`;
-      document.getElementById('wallet-coins').innerText = `${finalData.coins || 0} Coins`;
-      document.getElementById('refer-count').innerText = finalData.referrals || 0;
+      document.getElementById('profile-name').innerText = currentUserData.name;
+      document.getElementById('home-name').innerText = currentUserData.name;
+      document.getElementById('profile-email').innerText = currentUserData.email;
+      document.getElementById('profile-stats').innerText = `${currentUserData.coins || 0} Coins | ${currentUserData.referrals || 0} Referrals`;
+      document.getElementById('home-coins').innerText = `${currentUserData.coins || 0} Coins`;
+      document.getElementById('wallet-coins').innerText = `${currentUserData.coins || 0} Coins`;
+      document.getElementById('wallet-available').innerText = `${currentUserData.coins || 0}`;
+      document.getElementById('wallet-pending').innerText = `${currentUserData.pending || 0}`;
+      document.getElementById('withdraw-balance').innerText = `${currentUserData.coins || 0}`;
+      document.getElementById('refer-count').innerText = currentUserData.referrals || 0;
       document.getElementById('referral-link').value = `https://earndost.netlify.app/?ref=${user.uid}`;
       
       showPage('home');
-
     } else {
       document.getElementById('navbar').style.display = 'none';
       showPage('login');
     }
   });
 
-  window.login = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    try{ await signInWithEmailAndPassword(auth, email, password); }
-    catch(e){ alert(e.message); }
-  }
-  
-  window.googleLogin = async () => {
-    try{ await signInWithPopup(auth, provider); }
-    catch(e){ alert(e.message); }
-  }
-
+  window.login = async () => { const email = document.getElementById('email').value; const password = document.getElementById('password').value; try{ await signInWithEmailAndPassword(auth, email, password); }catch(e){ alert(e.message); }
+  window.googleLogin = async () => { try{ await signInWithPopup(auth, provider); }catch(e){ alert(e.message); }
   window.logout = async () => { await signOut(auth); }
   window.copyLink = () => { document.getElementById('referral-link').select(); document.execCommand('copy'); alert("Link Copied!"); }
+
+  // QUICK WITHDRAW
+  window.withdraw = async (coins) => {
+    const upi = document.getElementById('upi').value;
+    if(!upi){ alert("Pehle UPI ID dalo"); return; }
+    if(currentUserData.coins < coins){ alert("Coins kam hai"); return; }
+    let rupees = coins / 10;
+    if(confirm(`${rupees}₹ withdraw karne hai ${upi} pe?`)){
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {coins: currentUserData.coins - coins, pending: currentUserData.pending + coins});
+      alert(`${rupees}₹ ka request bhej diya. 24hr me aa jayega`);
+      location.reload();
+    }
+  }
+  window.customWithdraw = () => { const coins = parseInt(document.getElementById('custom-amount').value); if(!coins || coins < 20){ alert("Min 20 Coins = 2₹"); return; } withdraw(coins); }
+
+  // REDEEM GIFT CARD
+  window.redeemCard = async (type, coins, rupees) => {
+    if(currentUserData.coins < coins){ alert("Coins kam hai"); return; }
+    if(confirm(`${rupees}₹ ${type} Card redeem karna hai ${coins} Coins me?`)){
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {coins: currentUserData.coins - coins, pending: currentUserData.pending + coins});
+      alert(`Request bhej di gayi! 24hr me ${type} Code mil jayega`);
+      location.reload();
+    }
+  }
 
 </script>
 </body>
