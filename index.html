@@ -9,7 +9,8 @@
  body{background:#0a0a0a;color:#fff;font-family:sans-serif;margin:0;padding-bottom:70px}
  .page{display:none;padding:15px}
  .page.active{display:block}
- .card{background:linear-gradient(135deg,#00c6ff,#0072ff);padding:20px;border-radius:15px;text-align:center;margin-bottom:15px}
+ .card{background:linear-gradient(135deg,#00c6ff,#0072ff);padding:20px;border-radius:15px;text-align:center;margin-bottom:15px; animation: bounce 0.6s;}
+ @keyframes bounce {0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
  .card h2{margin:0;font-size:22px}
  .card p{margin:5px 0 0;font-size:14px}
  .box{background:#1a1a1a;padding:15px;border-radius:12px;margin-bottom:15px}
@@ -31,10 +32,10 @@
 <div id="loader">Loading...</div>
 
 <!-- 1. HOME -->
-<div id="home" class="page"><h2>Welcome <span id="home-name">Loading...</span></h2><div class="card"><h2 id="home-coins">0 Coins</h2><p>Earn more by completing offers</p></div><div class="box"><h3>Daily Check-in</h3><button class="btn" onclick="alert('Coming Soon')">Claim 10 Coins</button></div></div>
+<div id="home" class="page"><h2>Welcome <span id="home-name">User</span></h2><div class="card"><h2 id="home-coins">0 Coins</h2><p>Earn more by completing offers</p></div><div class="box"><h3>Daily Check-in</h3><button class="btn" onclick="alert('Coming Soon')">Claim 10 Coins</button></div></div>
 
 <!-- 2. OFFERS -->
-<div id="offers" class="page"><h2>Offers</h2><div class="box"><p>App Install - 50 Coins</p><button class="btn">Start</button></div></div>
+<div id="offers" class="page"><h2>Offers</h2><div class="box"><p>App Install - 50 Coins</p><button class="btn">Start</button></div><div class="box"><p>Watch Video - 10 Coins</p><button class="btn">Watch</button></div></div>
 
 <!-- 3. STORE -->
 <div id="store" class="page">
@@ -76,7 +77,7 @@
   <h2>Withdraw</h2>
   <div class="box">
     <p><b>Balance: <span id="withdraw-balance">0</span> Coins</b></p>
-    <p style="font-size:12px;color:#aaa">1 Rupee = 10 Coins</p>
+    <p style="font-size:12px;color:#aaa">1 Rupee = 10 Coins | Min 2₹</p>
     <input type="text" id="upi" placeholder="Enter UPI ID">
     <p style="margin-top:15px">Quick Withdraw:</p>
     <div class="grid-2">
@@ -151,7 +152,7 @@
       const snap = await getDoc(userRef);
 
       if(!snap.exists()){
-        currentUserData = {name: userName, email: user.email, photo: user.photoURL || "", coins: 0, pending: 0, referrals: 0, referredBy: null, createdAt: new Date()};
+        currentUserData = {name: userName, email: user.email, photo: user.photoURL || "", coins: 100, pending: 0, referrals: 0, referredBy: null, createdAt: new Date()}; // TEST KE LIYE 100 COINS DIYE
         await setDoc(userRef, currentUserData);
       } else {
         currentUserData = snap.data();
@@ -177,7 +178,6 @@
     }
   });
 
-  // YAHI 2 LINE FIX KI HAI - BRACKET BAND KIYA
   window.login = async () => { 
     const email = document.getElementById('email').value; 
     const password = document.getElementById('password').value; 
