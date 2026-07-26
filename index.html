@@ -119,7 +119,6 @@
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // TUMHARA FIREBASE CONFIG
   const firebaseConfig = {
     apiKey: "AIzaSyAaPptpt2LjX0nhUoqS8VR0Di9HjvYyMXE",
     authDomain: "earn-dost-d8c85.firebaseapp.com",
@@ -178,12 +177,22 @@
     }
   });
 
-  window.login = async () => { const email = document.getElementById('email').value; const password = document.getElementById('password').value; try{ await signInWithEmailAndPassword(auth, email, password); }catch(e){ alert(e.message); }
-  window.googleLogin = async () => { try{ await signInWithPopup(auth, provider); }catch(e){ alert(e.message); }
+  // YAHI 2 LINE FIX KI HAI - BRACKET BAND KIYA
+  window.login = async () => { 
+    const email = document.getElementById('email').value; 
+    const password = document.getElementById('password').value; 
+    try{ await signInWithEmailAndPassword(auth, email, password); }
+    catch(e){ alert(e.message); } 
+  }
+  
+  window.googleLogin = async () => { 
+    try{ await signInWithPopup(auth, provider); }
+    catch(e){ alert(e.message); } 
+  }
+  
   window.logout = async () => { await signOut(auth); }
   window.copyLink = () => { document.getElementById('referral-link').select(); document.execCommand('copy'); alert("Link Copied!"); }
 
-  // QUICK WITHDRAW
   window.withdraw = async (coins) => {
     const upi = document.getElementById('upi').value;
     if(!upi){ alert("Pehle UPI ID dalo"); return; }
@@ -197,7 +206,6 @@
   }
   window.customWithdraw = () => { const coins = parseInt(document.getElementById('custom-amount').value); if(!coins || coins < 20){ alert("Min 20 Coins = 2₹"); return; } withdraw(coins); }
 
-  // REDEEM GIFT CARD
   window.redeemCard = async (type, coins, rupees) => {
     if(currentUserData.coins < coins){ alert("Coins kam hai"); return; }
     if(confirm(`${rupees}₹ ${type} Card redeem karna hai ${coins} Coins me?`)){
